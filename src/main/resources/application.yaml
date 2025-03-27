@@ -6,10 +6,10 @@ spring:
     name: FridgeFeast
 
   datasource:
-    url: jdbc:mysql://localhost:3306/apiWebManga
+    url: jdbc:mysql://localhost:3306/ttcs
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: admin
+    password: huydn123456789
   jpa:
     hibernate:
       ddl-auto: update
