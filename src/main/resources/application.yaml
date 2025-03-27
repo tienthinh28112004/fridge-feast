@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: FridgeFeast
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/apiWebManga
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
