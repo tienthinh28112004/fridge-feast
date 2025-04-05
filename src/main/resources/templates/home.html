@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/home.css">
+    <script src="../static/javascript/add_ingredient.js"></script>
+    <title>Fridge Feast</title>
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="phone-icon">
+                <img src="../static/images/icon-phone-header.png.png">
+            </div>
+            <div class="phone-text">
+                Call us <a href="tel:070-7782-9137" class="phone-number">070-7782-9137</a>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="account-dropdown">
+                <button class="account-button">
+                    <img src="../static/images/icon-user-header.png">
+                    MY ACCOUNT
+                </button>
+                <div class="dropdown-content">
+                    <a href="#">Login</a>
+                    <a href="#">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar">
+        <div class="logo"><img src="../static/images/logo.png"></div>
+        <ul class="nav-links">
+            <li><a href="#">TRANG CHỦ</a></li>
+            <li class="dropdown">
+                <a href="#">ĐỀ XUẤT</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </li>
+            <li><a href="#">GIAN HÀNG</a></li>
+            <li><a href="#">BLOG</a></li>
+            <li><a href="#">LIÊN HỆ</a></li>
+        </ul>
+        <div class="nav-right">
+            <div class="search-icon">
+                <img src="../static/images/icon-search.png" alt="Search">
+            </div>
+            <div class="cart-dropdown">
+                <img src="../static/images/icon-cart.png" alt="Cart">
+                <div class="cart-dropdown-content">
+                    <div class="cart-item">
+                        <p>Union Bed</p>
+                        <p>Original Price: $700.00</p>
+                        <p>Discounted Price: $350.00</p>
+                        <p>Quantity: 1</p>
+                    </div>
+                    <div class="cart-item">
+                        <p>Union Bed</p>
+                        <p>Original Price: $700.00</p>
+                        <p>Discounted Price: $350.00</p>
+                        <p>Quantity: 1</p>
+                    </div>
+                    <p>Total: $1121.98</p>
+                    <button>VIEW CART</button>
+                    <button>CHECK OUT</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <img src="../static/images/Betterimage.ai_1743865292949.jpeg" style="width: 100%; height: 700px;" class="background">
+        <div class="button-group">
+            <p class="placeholder-text" id="placeholderText">Danh sách của bạn trống</p>
+            <img src="../static/images/rectangle-charcuterie-board-w-handle-removebg-preview.png" alt="Thớt gỗ" class="cutting-board">
+            <div class="items-container" id="itemsContainer">
+            </div>
+            <button class="add-btn" id="addButton">Thêm nguyên liệu</button>
+            <button class="create-recipe-btn" id="createRecipeButton">Tạo món ăn</button>
+        </div>
+    </div>
+</html>
