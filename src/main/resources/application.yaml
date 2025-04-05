@@ -4,13 +4,62 @@ server:
 spring:
   application:
     name: FridgeFeast
-
   datasource:
-    url: jdbc:mysql://localhost:3306/ttcs
+    url: jdbc:mysql://localhost:3306/FridgeFeast
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: huydn123456789
+    password: admin
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tienthinh28112004@gmail.com
+    password: afnr svcz spqj qlqg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            #
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+  data:
+    redis:
+      port: 6379
+      host: localhost
+    #docker exec -it redis redis-cli lệnh gõ docker để kiểm tra kết nối trong redis
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 630173321423-arejn20gun74igit3bvfo0er6q5889jd.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:3000/oauth2/callback/google
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+app:
+  secret: "=I82mz/9NnVguNXdWC/Q39GwXJr1z6Ok8=8fm10jksU5CU2BgT6Pml4wuYLe72xt"
+  jwt:
+    token:
+      expires-in: 3600000 # 60 minutes in milliseconds
+    refresh-token:
+      expires-in: 86400000 # 24 hours in milliseconds
+  registration:
+    email:
+      token:
+        expires-in: 300000 # 5 phút
+cloudinary:
+  cloud-name: "dcuhpodqw"
+  api-key: "469646197951194"
+  api-secret: "CC7K_qhEmJUQ4Ji-DTF5hIvEUMI"
+payment:
+  vnPay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    returnUrl: http://localhost:8080/ApiWebManga/payment/vn-pay-callback
+    tmnCode: VZCBDZF0
+    secretKey: Z1RRRC01ML3KT0NZNH4U2RNXQN8VFXP7
+    version: 2.1.0
+    command: pay
+    orderType: other
