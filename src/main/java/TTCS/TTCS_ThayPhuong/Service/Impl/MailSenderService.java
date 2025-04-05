@@ -18,14 +18,14 @@ public class MailSenderService {
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.application.name}")
-    private String webName;//apiWebManga
+    private String webName;
 
     @Value("${spring.mail.username}")
     private String senderAddress;//tienthinh28112004@gmail.com
 
     public void sendEmailUser(User user) throws MessagingException, MailException {//bắt lối gửi mail
         try{
-            //String otp = user.getEmailVerificationToken().getToken(); // Lấy mã OTP từ token
+            String otp = user.getEmailVerificationToken().getToken(); // Lấy mã OTP từ token
 
             // Tạo nội dung HTML trực tiếp
             String htmlContent = "<!DOCTYPE html>" +
@@ -34,7 +34,7 @@ public class MailSenderService {
                     "<body style=\"font-family: Arial, sans-serif; text-align: center;\">" +
                     "<h2 style=\"color: #333;\">Xác minh tài khoản của bạn</h2>" +
                     "<p>Cảm ơn bạn đã đăng ký! Dưới đây là mã xác minh (OTP) của bạn:</p>" +
-                    //"<h3 style=\"font-size: 24px; color: #007bff;\">" + otp + "</h3>" +
+                    "<h3 style=\"font-size: 24px; color: #007bff;\">" + otp + "</h3>" +
                     "<p>Vui lòng nhập mã này trên trang web của chúng tôi để hoàn tất xác minh.</p>" +
                     "<p>Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này.</p>" +
                     "<hr style=\"margin: 20px 0;\">" +
