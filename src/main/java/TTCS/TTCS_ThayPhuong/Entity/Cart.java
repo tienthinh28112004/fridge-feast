@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "Cart")
 @Getter
 @Setter
 @Builder
@@ -23,7 +23,7 @@ public class Cart extends AbstractEntity<Long>{
     @Column(name="total_money",nullable = false)
     private Long totalMoney;//price * quantity
 
-//    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)//nếu có thay đổi nó sẽ tự động câập nhật trong csdl và trong cả orderdetail
-//    @JsonManagedReference
-//    private List<CartDetail> cartDetails;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)//nếu có thay đổi nó sẽ tự động câập nhật trong csdl và trong cả orderdetail
+    @JsonManagedReference
+    private List<CartDetail> cartDetails;
 }

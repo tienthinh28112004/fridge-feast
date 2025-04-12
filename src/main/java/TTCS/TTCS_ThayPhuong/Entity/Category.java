@@ -18,7 +18,7 @@ public class Category {
     @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(name = "description",length = 255)
+    @Column(name = "description")
     private String description;
 
 }

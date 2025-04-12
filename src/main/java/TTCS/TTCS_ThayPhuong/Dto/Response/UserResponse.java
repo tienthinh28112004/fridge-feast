@@ -4,6 +4,9 @@ import TTCS.TTCS_ThayPhuong.Entity.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,6 +22,7 @@ public class UserResponse {
     private String avatarUrl;
     private Double latitude;
     private Double longitude;
+    private List<IngredientBySupplierResponse> cartDetailList=new ArrayList<>();
 
     public static UserResponse convert(User user){
         return UserResponse.builder()
@@ -30,6 +34,7 @@ public class UserResponse {
                 .dob(user.getDob())
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
+                .cartDetailList(user.getCart().getCartDetails().stream().map(IngredientBySupplierResponse::convertCart).collect(Collectors.toList()))
                 .build();
     }
 }

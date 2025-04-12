@@ -1,5 +1,6 @@
 package TTCS.TTCS_ThayPhuong.Dto.Request;
 
+import TTCS.TTCS_ThayPhuong.Validator.CustomPasswordValidator;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -13,5 +14,6 @@ public class LogInRequest {
     private String email;
 
     @NotBlank
+    @CustomPasswordValidator
     private String password;
 }

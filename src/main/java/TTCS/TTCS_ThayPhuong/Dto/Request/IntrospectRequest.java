@@ -1,5 +1,6 @@
 package TTCS.TTCS_ThayPhuong.Dto.Request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class IntrospectRequest {
+    @NotBlank
     private String accessToken;
 }

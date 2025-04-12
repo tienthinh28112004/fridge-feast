@@ -42,12 +42,20 @@ public class ApplicationInitConfig {
                         .build());
             }
 
+            Optional<Roles> roleSupplier = rolesRepository.findByName(String.valueOf(Role.SUPPLIER));
+            if(roleSupplier.isEmpty()) {
+                rolesRepository.save(Roles.builder()
+                        .name(String.valueOf(Role.SUPPLIER))
+                        .description("Supplier role")
+                        .build());
+            }
             Optional<Roles> roleAdmin = rolesRepository.findByName(String.valueOf(Role.ADMIN));
             if(roleAdmin.isEmpty()) {
-                rolesRepository.save(Roles.builder()
-                    .name(String.valueOf(Role.ADMIN))
-                    .description("Admin role")
-                    .build());
+                Roles rolesAdmin=Roles.builder()
+                        .name(String.valueOf(Role.ADMIN))
+                        .description("Admin role")
+                        .build();
+                rolesRepository.save(rolesAdmin);
                 //tạo tài khoản admin
                 User user= User.builder()
                         .email("admin@gmail.com")
@@ -56,7 +64,7 @@ public class ApplicationInitConfig {
                 Set<UserHasRole> userHasRoles=new HashSet<>();
                 userHasRoles.add(UserHasRole.builder()
                         .user(user)
-                        .role(roleAdmin.get())
+                        .role(rolesAdmin)
                         .build());
                 user.setUserHasRoles(userHasRoles);
                 log.info("admin đã được tạo");

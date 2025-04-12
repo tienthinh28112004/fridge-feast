@@ -15,6 +15,7 @@ import TTCS.TTCS_ThayPhuong.Repository.HttpClient.OutBoundUserClient;
 import TTCS.TTCS_ThayPhuong.Repository.RolesRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
 import TTCS.TTCS_ThayPhuong.Service.AuthenticationService;
+import TTCS.TTCS_ThayPhuong.Service.EmailVerificationTokenService;
 import TTCS.TTCS_ThayPhuong.Service.JwtService;
 import TTCS.TTCS_ThayPhuong.Service.RedisService;
 import com.nimbusds.jose.JOSEException;
@@ -44,22 +45,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
+    private final EmailVerificationTokenService emailVerificationTokenService;
     private final OutBoundIdentityClient outBoundIdentityClient;
     private final OutBoundUserClient outBoundUserClient;
 
     @Value("${app.jwt.token.expires-in}")
-    private final Long accessTokenExpireIn;
+    private Long accessTokenExpireIn;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private final String clientId;
+    private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private final String clientSecret;
+    private String clientSecret;
 
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
-    private final String redirectUri;
+    private String redirectUri;
 
-    private final String grantType ="authorization_code";
+    private final String grant_Type ="authorization_code";
 
 
     @Override
@@ -148,7 +150,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String verifyEmail(String token) {
-        return null;
+        User user= emailVerificationTokenService.getUserByToken(token);
+        user.setEmailVerifiedAt(LocalDateTime.now());
+        user.setActive(true);
+        userRepository.save(user);
+
+        emailVerificationTokenService.deleteByUserId(user.getId());//xóa token
+        log.info("E-mail verified with token: {}",token);
+        return "Xác thực thành công";
     }
 
 
@@ -175,11 +184,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public SignInResponse loginWithGoogle(String code, HttpServletResponse response) {
 
         ExchangeTokenResponse result = outBoundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
+                        .code(code)
                         .clientId(clientId)
                         .clientSecret(clientSecret)
-                        .code(code)
                         .redirectUri(redirectUri)
-                        .grantType(grantType)
+                        .grantType(grant_Type)
                 .build());
 
         GoogleUserResponse getUserInfo = outBoundUserClient.getUserInfo("json",result.getAccessToken());

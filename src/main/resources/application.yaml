@@ -40,7 +40,7 @@ spring:
             redirect-uri: http://localhost:3000/oauth2/callback/google
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 app:
-  secret: "=I82mz/9NnVguNXdWC/Q39GwXJr1z6Ok8=8fm10jksU5CU2BgT6Pml4wuYLe72xt"
+  secret: =I82mz/9NnVguNXdWC/Q39GwXJr1z6Ok8=8fm10jksU5CU2BgT6Pml4wuYLe72xt
   jwt:
     token:
       expires-in: 3600000 # 60 minutes in milliseconds

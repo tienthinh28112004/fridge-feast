@@ -17,7 +17,7 @@ import java.util.Random;
 public class EmailVerificationTokenServiceImpl implements EmailVerificationTokenService {
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     @Value("${app.registration.email.token.expires-in}")
-    private final Long expiresIn;
+    private Long expiresIn;
     @Override
     public EmailVerificationToken create(User user) {
         String newToken =generateToken();

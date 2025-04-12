@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -57,11 +58,11 @@ public class User extends AbstractEntity<Long>{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Cart cart;
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    @JsonManagedReference//để phòng hờ thôi vì chủ yếu mình đưa ra userReponse mà
-//    private List<Order> orders = new ArrayList<>();
-//
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference//để phòng hờ thôi vì chủ yếu mình đưa ra userReponse mà
+    private List<Order> orders = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<UserHasRole> userHasRoles;

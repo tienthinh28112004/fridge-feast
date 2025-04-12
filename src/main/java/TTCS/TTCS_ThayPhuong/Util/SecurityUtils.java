@@ -17,6 +17,6 @@ public class SecurityUtils {
         if(authentication.getPrincipal() instanceof Jwt jwt){
             return Optional.ofNullable(jwt.getSubject());//lấy ra email
         }
-        return null;
+        return Optional.empty();
     }
 }

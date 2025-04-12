@@ -1,17 +1,15 @@
 package TTCS.TTCS_ThayPhuong.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "dish_has_category")
-@Table(name = "DishHasCategory")
+@Builder
+@Entity(name = "DishHasCategory")
+@Table(name = "dish_has_category")
 public class DishHasCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

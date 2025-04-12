@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +27,12 @@ public class JwtServiceImpl implements JwtService {
     private final RedisService redisService;
 
     @Value("${app.secret}")
-    private String secretKey;
+    private  String secretKey;
 
     @Value("${app.jwt.token.expires-in}")
     private Long accessTokenExpireIn;
 
-    @Value("${app.jet.refresh-token.expires-in}")
+    @Value("${app.jwt.refresh-token.expires-in}")
     private Long refreshTokenExpireIn;
 
     @Override
