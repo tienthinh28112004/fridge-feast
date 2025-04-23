@@ -23,7 +23,7 @@ import java.util.List;
 public class IngredientController {
     private final IngredientService ingredientService;
     @PostMapping("/addIngredient")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> addIngredient(
             @RequestPart MultipartFile ingredientPdf,
             @RequestPart IngredientCreateRequest request
@@ -44,7 +44,7 @@ public class IngredientController {
     }
 
     @GetMapping("/getAllIngredient")
-    @PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
     public ApiResponse<List<IngredientResponse>> getAllIngredient(){
         return ApiResponse.<List<IngredientResponse>>builder()
                 .message("List all ingredient successfully")
@@ -52,10 +52,10 @@ public class IngredientController {
                 .build();
     }
     @PatchMapping("/updateIngredient/{ingredientId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> updateIngredient(
             @PathVariable("ingredientId") Long ingredientId,
-            @RequestPart MultipartFile ingredientPdf,
+            @RequestPart(required = false) MultipartFile ingredientPdf,
             @RequestPart IngredientUpdateRequest request
     ){
         return ApiResponse.<IngredientResponse>builder()
@@ -64,7 +64,7 @@ public class IngredientController {
                 .build();
     }
     @DeleteMapping("/deleteSoft/{ingredientId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> deleteSoftIngredient(
           @PathVariable("ingredientId") Long ingredientId
     ){
@@ -75,7 +75,7 @@ public class IngredientController {
     }
 
     @DeleteMapping("/deleteHard/{ingredientId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> deleteHardIngredient(
             @PathVariable("ingredientId") Long ingredientId
     ){

@@ -3,6 +3,7 @@ package TTCS.TTCS_ThayPhuong.Dto.Response;
 import TTCS.TTCS_ThayPhuong.Entity.User;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,18 +15,23 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+    private Long userId;
     private String fullName;
     private String email;
     private String phoneNumber;
     private boolean isActive;
-    private LocalDateTime dob;
+    private LocalDate dob;
     private String avatarUrl;
     private Double latitude;
     private Double longitude;
-    private List<IngredientBySupplierResponse> cartDetailList=new ArrayList<>();
+    private List<String> roles;
+    //private List<IngredientBySupplierResponse> cartDetailList=new ArrayList<>();
 
     public static UserResponse convert(User user){
+        List<String> rolelist=new ArrayList<>();
+        user.getUserHasRoles().stream().map(userHasRole -> userHasRole.getRole().getName()).forEach(rolelist::add);
         return UserResponse.builder()
+                .userId(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .isActive(user.isActive())
@@ -34,7 +40,8 @@ public class UserResponse {
                 .dob(user.getDob())
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
-                .cartDetailList(user.getCart().getCartDetails().stream().map(IngredientBySupplierResponse::convertCart).collect(Collectors.toList()))
+                .roles(rolelist)
+                //.cartDetailList(user.getCart().getCartDetails().stream().map(IngredientBySupplierResponse::convertCart).collect(Collectors.toList()))
                 .build();
     }
 }

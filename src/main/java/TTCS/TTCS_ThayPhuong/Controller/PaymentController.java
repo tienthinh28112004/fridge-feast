@@ -24,7 +24,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/create_payment")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<?> createPayment(HttpServletRequest req,
                                         @RequestBody @Valid PaymentRequest request) throws UnsupportedEncodingException {
         return ApiResponse.builder()

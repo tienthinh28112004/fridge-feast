@@ -13,7 +13,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class ApplicationInitConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     @Bean
+    @Transactional
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driver-class-name",
@@ -50,26 +53,44 @@ public class ApplicationInitConfig {
                         .build());
             }
             Optional<Roles> roleAdmin = rolesRepository.findByName(String.valueOf(Role.ADMIN));
-            if(roleAdmin.isEmpty()) {
-                Roles rolesAdmin=Roles.builder()
+            if (roleAdmin.isEmpty()) {
+                // Tạo role ADMIN nếu chưa có
+                Roles rolesAdmin = Roles.builder()
                         .name(String.valueOf(Role.ADMIN))
                         .description("Admin role")
                         .build();
                 rolesRepository.save(rolesAdmin);
-                //tạo tài khoản admin
-                User user= User.builder()
-                        .email("admin@gmail.com")
-                        .password(passwordEncoder.encode("Admin@123"))
-                        .build();
-                Set<UserHasRole> userHasRoles=new HashSet<>();
-                userHasRoles.add(UserHasRole.builder()
-                        .user(user)
-                        .role(rolesAdmin)
-                        .build());
-                user.setUserHasRoles(userHasRoles);
-                log.info("admin đã được tạo");
-                userRepository.save(user);
+
+                // Kiểm tra nếu user admin chưa tồn tại
+                Optional<User> existingAdmin = userRepository.findByEmail("admin@gmail.com");
+                if (existingAdmin.isEmpty()) {
+                    // Tạo user admin
+                    User user = User.builder()
+                            .email("admin@gmail.com")
+                            .password(passwordEncoder.encode("Admin@123"))
+                            .isActive(true)
+                            .emailVerifiedAt(LocalDateTime.now()) // có thể set luôn nếu muốn
+                            .build();
+
+                    // Tạo quan hệ role
+                    UserHasRole userHasRole = UserHasRole.builder()
+                            .user(user)           // set chiều user → role
+                            .role(rolesAdmin)
+                            .build();
+
+                    // Gắn set role vào user
+                    Set<UserHasRole> userHasRoles = new HashSet<>();
+                    userHasRoles.add(userHasRole);
+                    user.setUserHasRoles(userHasRoles); // set chiều role → user
+
+                    // Lưu user (sẽ cascade lưu luôn UserHasRole)
+                    userRepository.save(user);
+                    log.info("Admin account has been created.");
+                } else {
+                    log.info("Admin user already exists.");
+                }
             }
+
             log.info("Application initialization completed .....");
         };
     }

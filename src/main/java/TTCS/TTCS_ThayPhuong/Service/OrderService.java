@@ -11,8 +11,6 @@ public interface OrderService {
     OrderResponse createOrder(OrderRequest orderRequest);
     List<OrderResponse> findOrderByUser();
     OrderResponse informationOrder(Long orderId);
-
     void updateOrderStatus(Long orderId, OrderStatus newStatus);
-    void updatePaymentExpression(Long orderId, PaymentExpression newPayment);
     List<OrderResponse> orderRecent(int page,int size);
 }

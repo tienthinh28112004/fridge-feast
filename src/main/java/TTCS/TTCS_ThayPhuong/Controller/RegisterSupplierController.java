@@ -21,7 +21,7 @@ import java.util.List;
 public class RegisterSupplierController {
     private final RegisterSupplierService registerSupplierService;
     @GetMapping("/getAllSupplier")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<List<SupplierResponse>> getAllSupplier(){
         return ApiResponse.<List<SupplierResponse>>builder()
                 .message("Get all supplier")
@@ -29,7 +29,7 @@ public class RegisterSupplierController {
                 .build();
     }
     @PatchMapping("/acceptSupplier/{supplierId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<SupplierResponse> acceptSupplier(
             @PathVariable("supplierId") Long supplierId
     ){
@@ -40,7 +40,7 @@ public class RegisterSupplierController {
     }
 
     @PatchMapping("/rejectSupplier/{supplierId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<SupplierResponse> rejectSupplier(
             @PathVariable("supplierId") Long supplierId
     ) {
@@ -50,7 +50,7 @@ public class RegisterSupplierController {
                 .build();
     }
 
-    @GetMapping("/registerSupplier")
+    @PostMapping("/registerSupplier")
     @PreAuthorize("isAuthenticated()")
     public ApiResponse<SupplierResponse> registerSupplier(
             @RequestPart @Validated UserRegisterSupplierRequest request,

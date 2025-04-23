@@ -24,7 +24,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping(value = "/getCommentsByDish/{dishId}")
-    public ApiResponse<PageResponse<List<CommentResponse>>> commentByBook (@PathVariable Long dishId,
+    public ApiResponse<PageResponse<List<CommentResponse>>> commentByDish (@PathVariable Long dishId,
                                                                            @RequestParam(defaultValue = "1", required = false) int page,
                                                                            @RequestParam(defaultValue = "10", required = false) int size) {
         return ApiResponse.<PageResponse<List<CommentResponse>>>builder()

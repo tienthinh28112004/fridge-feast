@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
             parentComment = commentRepository.findById(request.getParentCommentId())
                     .orElseThrow(()->new NotFoundException("Comment not found"));
         }
-        if(StringUtils.hasLength(request.getContent())){
+        if(!StringUtils.hasLength(request.getContent())){
             throw new BadRequestException("Bạn chưa comment");
         }
         Comment newComment= Comment.builder()
@@ -99,7 +99,9 @@ public class CommentServiceImpl implements CommentService {
             throw new BadRequestException("Email đang đăng nhập không trùng với email của hệ thống");
         }
         comment.setContent(request.getContent());
+        commentRepository.save(comment);
         return CommentUpdateResponse.builder()
+                .commentId(commentId)
                 .content(request.getContent())
                 .build();
     }

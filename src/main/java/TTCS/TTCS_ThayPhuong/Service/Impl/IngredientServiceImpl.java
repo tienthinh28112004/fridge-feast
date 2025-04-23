@@ -34,6 +34,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .isActive(true)
                 .ingredientImage(ingredientUrl)
                 .build();
+        ingredientRepository.save(ingredient);
         return IngredientResponse.convert(ingredient);
     }
 
@@ -63,7 +64,7 @@ public class IngredientServiceImpl implements IngredientService {
             ingredient.setDescription(request.getDescription());
         }
         if(StringUtils.hasLength(request.getUnit())&& !Objects.equals(request.getUnit(),ingredient.getUnit())){
-            ingredient.setName(request.getUnit());
+            ingredient.setUnit(request.getUnit());
         }
         if(ingredientPdf!=null){
             ingredient.setIngredientImage(cloudinaryService.uploadImage(ingredientPdf));

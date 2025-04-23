@@ -41,11 +41,6 @@ public class OrderResponse {
     private List<IngredientBySupplierResponse> detailResponse;
 
     public static OrderResponse convert(Order order){
-        Long totalMoney =0L;
-        for(OrderDetail orderDetail: order.getOrderDetails()){
-            totalMoney+=orderDetail.getOrder().getTotalMoney();
-        }
-        log.info("tiền{}",totalMoney);
         return OrderResponse.builder()
                 .orderId(order.getId())
                 .address(order.getAddress())
@@ -56,7 +51,7 @@ public class OrderResponse {
                 .orderStatus(order.getOrderStatus())
                 .email(order.getUser().getEmail())
                 .paymentExpression(order.getPaymentExpression())
-                .totalMoney(totalMoney)
+                .totalMoney(order.getTotalMoney())
                 .detailResponse(order.getOrderDetails().stream().map(IngredientBySupplierResponse::convertOrder)
                         .collect(Collectors.toList()))
                 .build();

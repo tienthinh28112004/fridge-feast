@@ -14,14 +14,12 @@ import TTCS.TTCS_ThayPhuong.Repository.HttpClient.OutBoundIdentityClient;
 import TTCS.TTCS_ThayPhuong.Repository.HttpClient.OutBoundUserClient;
 import TTCS.TTCS_ThayPhuong.Repository.RolesRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
-import TTCS.TTCS_ThayPhuong.Service.AuthenticationService;
-import TTCS.TTCS_ThayPhuong.Service.EmailVerificationTokenService;
-import TTCS.TTCS_ThayPhuong.Service.JwtService;
-import TTCS.TTCS_ThayPhuong.Service.RedisService;
+import TTCS.TTCS_ThayPhuong.Service.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +38,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private final UserService userService;
     private final RolesRepository rolesRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -66,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserResponse register(UserCreateRequest request) {
-        return null;
+        return userService.createUser(request);
     }
 
     @Override
@@ -78,9 +77,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadRequestException("Tài khoản của bạn chưa ược kích hoạt,vui lòng xác nhận mã OTP được gửi về mail");
         }
 
-        if(!passwordEncoder.matches(user.getPassword(), request.getPassword())){
-            throw new BadCredentialsException("Thông tin đăng nhập không hợp lệ,mật khẩu không trùng với mật khẩu của hệ thống");
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Thông tin đăng nhập không hợp lệ, mật khẩu không đúng");
         }
+
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -149,6 +149,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public String verifyEmail(String token) {
         User user= emailVerificationTokenService.getUserByToken(token);
         user.setEmailVerifiedAt(LocalDateTime.now());

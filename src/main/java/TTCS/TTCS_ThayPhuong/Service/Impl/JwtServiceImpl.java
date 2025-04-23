@@ -87,7 +87,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String extractEmail(String accessToken) throws ParseException {
         SignedJWT signedJWT=SignedJWT.parse(accessToken);
-        return signedJWT.getJWTClaimsSet().toString();
+        return signedJWT.getJWTClaimsSet().getSubject();
     }
 
     @Override

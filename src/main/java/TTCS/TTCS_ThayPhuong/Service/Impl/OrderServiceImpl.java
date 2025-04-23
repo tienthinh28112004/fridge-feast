@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
                 .phoneNumber(request.getPhoneNumber())
                 .address(request.getAddress())
                 .note(request.getNote())
-                .paymentExpression(PaymentExpression.DIRECT)
+                .paymentExpression(PaymentExpression.valueOf(String.valueOf(request.getPaymentExpression())))
                 .orderStatus(OrderStatus.PENDDING)
                 .user(user)
                 .orderDate(LocalDateTime.now())
@@ -97,21 +97,6 @@ public class OrderServiceImpl implements OrderService {
         Order order=orderRepository.findById(orderId)
                 .orElseThrow(()->new NotFoundException("Order not found"));
         order.setOrderStatus(newStatus);
-        orderRepository.save(order);
-    }
-
-    @Override
-    public void updatePaymentExpression(Long orderId, PaymentExpression newPayment) {
-        String email= SecurityUtils.getCurrentLogin()
-                .orElseThrow(()->new TokenExpireException("Bạn chưa đăng nhập"));
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()->new NotFoundException("User not found"));
-        Order order=orderRepository.findById(orderId)
-                .orElseThrow(()->new NotFoundException("Order not found"));
-        if(!Objects.equals(user.getId(),order.getUser().getId())){
-            throw new BadRequestException("Email của bạn không trùng với email của người đặt đơn hàng trong hệ thống");
-        }
-        order.setPaymentExpression(newPayment);
         orderRepository.save(order);
     }
 

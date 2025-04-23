@@ -23,7 +23,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     @PostMapping("/addCategory")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<Category> addCategory(
             @RequestBody CategoryRequest request) {
         return ApiResponse.<Category>builder()
@@ -39,7 +39,7 @@ public class CategoryController {
                 .result(categoryService.getCategoryById(categoryId))
                 .build();
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/deleteCategory/{categoryId}")
     public ApiResponse<?> deleteCategory(
             @PathVariable("categoryId") Long categoryId) {
@@ -48,8 +48,8 @@ public class CategoryController {
                 .message("Delete category successfully")
                 .build();
     }
-    @PostMapping("/listCategory")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/listCategory")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<List<Category>> getAllCategory() {
         return ApiResponse.<List<Category>>builder()
                 .message("Get all category")

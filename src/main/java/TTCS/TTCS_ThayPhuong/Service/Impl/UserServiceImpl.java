@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
         if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
             throw new BadRequestException("Mật khẩu bạn đưa vào không trùng với mật khẩu trong hệ thống");
         }
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
 
         return UserResponse.convert(user);

@@ -61,7 +61,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{orderId}/orderStatus")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam String newStatus
@@ -70,18 +70,6 @@ public class OrderController {
         log.info("orderId {}",orderId);
         return ApiResponse.<Void>builder()
                 .message("change orderStatus successfully")
-                .build();
-    }
-
-    @PatchMapping("/{orderId}/paymentStatus")
-    @PreAuthorize("isAuthenticated()")
-    public ApiResponse<?> updateStatusPayment(
-            @PathVariable Long orderId,
-            @RequestParam String newStatus
-    ) {
-        orderService.updatePaymentExpression(orderId, PaymentExpression.valueOf(newStatus));
-        return ApiResponse.<Void>builder()
-                .message("update Status Payment")
                 .build();
     }
 }

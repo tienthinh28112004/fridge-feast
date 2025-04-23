@@ -18,6 +18,7 @@ import TTCS.TTCS_ThayPhuong.Service.RegisterSupplierService;
 import TTCS.TTCS_ThayPhuong.Util.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RegisterSupplierServiceImpl implements RegisterSupplierService {
     private final SupplierRepository supplierRepository;
     private final CloudinaryService cloudinaryService;
@@ -43,6 +45,7 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
     }
 
     @Override
+    @Transactional
     public SupplierResponse registerSupplier(MultipartFile avatarPdf, MultipartFile resumePdf, UserRegisterSupplierRequest request) {
         String email= SecurityUtils.getCurrentLogin()
                 .orElseThrow(()->new TokenExpireException("Bạn chưa đăng nhập"));
@@ -59,6 +62,7 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
         if(resumePdf!=null){
             resumeUrl=cloudinaryService.uploadImage(resumePdf);
         }
+        log.info("Password {}",user.getPassword());
         Supplier supplier=Supplier.builder()
                 .user(user)
                 .supplierName(request.getSupplierName())
@@ -81,7 +85,7 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
     public SupplierResponse acceptSupplier(Long supplierId) {
         Supplier supplier=supplierRepository.findById(supplierId)
                 .orElseThrow(()->new NotFoundException("Supplier not found"));
-        if(Objects.equals(supplier.getStatusRegisterSupplier(),StatusRegisterSupplier.PENDING)){
+        if(!Objects.equals(supplier.getStatusRegisterSupplier(),StatusRegisterSupplier.APPROVED)){
             supplier.setStatusRegisterSupplier(StatusRegisterSupplier.APPROVED);
 
             Roles roles=rolesRepository.findByName(String.valueOf(Role.SUPPLIER))

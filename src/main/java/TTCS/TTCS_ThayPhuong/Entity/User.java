@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class User extends AbstractEntity<Long>{
     private boolean isActive;
 
     @Column(name = "date_of_birth")
-    private LocalDateTime dob;
+    private LocalDate dob;
 
     @Column(name = "avatar_url")
     private String avatarUrl;
@@ -45,7 +46,7 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token", columnDefinition = "TEXT")
     private String refreshToken;
 
     @Column(name = "email_verified_at")

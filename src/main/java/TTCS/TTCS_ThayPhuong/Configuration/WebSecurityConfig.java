@@ -1,6 +1,7 @@
 package TTCS.TTCS_ThayPhuong.Configuration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,11 +12,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Service;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
     private static final String[] White_List = {
@@ -39,7 +42,7 @@ public class WebSecurityConfig {
                 .requestMatchers(White_List).permitAll()
                 .anyRequest().authenticated()
         ).sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS));
-
+        log.info("đã đến đây");
         //xử lý các endpoint cần token
         http.oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwtConfigurer -> jwtConfigurer.decoder(customJwtDecoder)//giải mã token

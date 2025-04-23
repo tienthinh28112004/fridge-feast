@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder//100000003
 public class UserCreateRequest {
     @NotBlank
     @MinSizeValidator(min=8)

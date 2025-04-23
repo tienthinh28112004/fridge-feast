@@ -1,5 +1,6 @@
 package TTCS.TTCS_ThayPhuong.Dto.Request;
 
+import TTCS.TTCS_ThayPhuong.Enums.PaymentExpression;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,9 @@ public class OrderRequest {
 
     @NotBlank(message = "note cannot be null")
     private String note;
+
+    @NotBlank
+    private PaymentExpression paymentExpression;
 
     private List<OrderDetailRequest> detailRequests;
 }

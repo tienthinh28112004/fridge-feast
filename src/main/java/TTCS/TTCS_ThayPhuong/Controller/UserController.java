@@ -26,7 +26,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns")
     public ApiResponse<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "1", required = false) int pageNo,
                                                                @RequestParam(defaultValue = "10", required = false) int pageSize,
@@ -47,7 +47,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{userId}")
     public ApiResponse<UserResponse> getUser(
             @PathVariable("userId") final Long userId) {
@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<String> deleteUser(
             @PathVariable("userId") final Long userId){
         userService.delete(userId);

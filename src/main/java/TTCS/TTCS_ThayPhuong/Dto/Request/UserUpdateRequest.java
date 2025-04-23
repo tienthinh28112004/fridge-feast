@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,6 +20,6 @@ public class UserUpdateRequest {
     @MinSizeValidator(min=9)
     private String phoneNumber;
 
-    private LocalDateTime dob;
+    private LocalDate dob;
 
 }

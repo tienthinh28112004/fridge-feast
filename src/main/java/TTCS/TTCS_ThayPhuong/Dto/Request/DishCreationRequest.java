@@ -14,19 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class DishCreationRequest {
-    private String name;
 
-    private String description;
+    private String name; //rau muốn xào tỏi
+
+    private String description;//món ăn thích hợp vào ngày nắng nóng
 
     private String recipe;
 
-    private Long timeCook;
+    private Long timeCook;//15
 
-    private Float price;
+    private Float price;//20k
 
     private String dishImage;
 
-    private List<Long> listCategoryId;
+    private List<Long> listCategoryId;//1,2,3
 
-    private List<Long> listIngredientId;
+    private List<Long> listIngredientId;//1,2,4
 }
