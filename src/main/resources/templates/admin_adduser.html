@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm người dùng</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.png">
+    <link rel="stylesheet" href="/static/css/style_admin_add.css">
+    <link rel="stylesheet" href="/static/css/style_admin_menu.css">
+</head>
+<body>
+<div class="menu">
+    <img src="/static/images/logo.png" alt="Logo">
+    <div class="line-break"></div>
+    <a href="#dashboard"><i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp; Trang chủ</a>
+    <a href="#users"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý người dùng</a>
+    <a href="#orders"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý đơn hàng</a>
+    <a href="#ingredients"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý nguyên liệu</a>
+    <a href="#dishes"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý món ăn</a>
+    <a href="#admin-settings"><i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp; Cài đặt</a>
+    <div class="footer"><p>&copy; 2025 FridgeFeast.</p></div>
+</div>
+<div class="content">
+    <div class="title-box">
+        <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
+        <div class="sign-out">ĐĂNG XUẤT</div>
+
+        <div class="noti">
+            <i class="glyphicon glyphicon-envelope"></i>
+        </div>
+    </div>
+
+<div class="form-box">
+    <div class="form-box-left">
+        <div class="form-group">
+            <label for="id">ID:</label>
+            <input type="text" id="id">
+        </div>
+        <div class="form-group">
+            <label for="name">Tên người dùng:</label>
+            <input type="text" id="name" name="name" placeholder="Nhập tên">
+        </div>
+        <div class="form-group">
+            <label for="gender">Giới tính:</label>
+            <select id="gender" name="gender">
+                <option value="Male">Nam</option>
+                <option value="Female">Nữ</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Ngày sinh:</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Nhập email">
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Số điện thoại:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại">
+        </div>
+        <div class="form-group">
+            <label for="address">Địa chỉ:</label>
+            <input type="text" id="address" name="address" placeholder="Nhập địa chỉ">
+        </div>
+        <button type="submit" class="btn-submit">ADD</button>
+        <button type="submit" class="btn-submit">CANCEL</button>
+    </div>
+    <div class="form-box-right">
+        <div class="img-box"></div>
+        <input type="file" id="image" name="image">
+    </div>
+</div>
+</div>
+</body>
+</html>
