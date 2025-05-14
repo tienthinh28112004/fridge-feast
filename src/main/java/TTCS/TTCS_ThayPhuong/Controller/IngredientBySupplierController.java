@@ -54,12 +54,12 @@ public class IngredientBySupplierController {
     public ApiResponse<PageResponse<List<IngredientDetailResponse>>> getIngredientWithSortAndMultiFieldAndSearch(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String ...sortBy
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String ...search
     ){
         return ApiResponse.<PageResponse<List<IngredientDetailResponse>>>builder()
                 .message("Search detail ingredient")
-                .result(ingredientBySupplierService.getIngredientWithSortAndMultiFieldAndSearch(page, size, keyword, sortBy))
+                .result(ingredientBySupplierService.getIngredientWithSortAndMultiFieldAndSearch(page, size, sortBy,search))
                 .build();
     }
 }

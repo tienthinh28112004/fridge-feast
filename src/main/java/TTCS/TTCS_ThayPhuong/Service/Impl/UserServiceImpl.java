@@ -11,6 +11,7 @@ import TTCS.TTCS_ThayPhuong.Exception.BadRequestException;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Exception.TokenExpireException;
 import TTCS.TTCS_ThayPhuong.Repository.RolesRepository;
+import TTCS.TTCS_ThayPhuong.Repository.SupplierRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
 import TTCS.TTCS_ThayPhuong.Service.EmailVerificationTokenService;
 import TTCS.TTCS_ThayPhuong.Service.UserService;
@@ -21,15 +22,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private final RolesRepository rolesRepository;
     private final UserRepository userRepository;
     private final MailSenderService mailSenderService;
-    private final CloudinaryService cloudinaryService;
+    private final SupplierRepository supplierRepository;
     private final EmailVerificationTokenService emailVerificationTokenService;
     @Override
     public UserResponse createUser(UserCreateRequest request) {
@@ -68,6 +67,8 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .isActive(false)
+                .longitude(request.getLongitude())
+                .latitude(request.getLatitude())
                 .avatarUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp3ztVtyMtzjiT_yIthons_zqTQ_TNZm4PS0LxFyFO0ozfM2S87W8QoL4&s")
                 .build();
         userRepository.save(user);
@@ -138,22 +139,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse update(Long userId, UserUpdateRequest request, MultipartFile avatarPdf) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()->new NotFoundException("User not found"));
-        if(StringUtils.hasLength(request.getPhoneNumber())&&!request.getPhoneNumber().equals(user.getPhoneNumber())){
-            user.setPhoneNumber(request.getPhoneNumber());
+    public UserResponse update(UserUpdateRequest request) {
+        String email = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new BadCredentialsException("email invalid"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        //boolean isRequiredEmailVerification = false;
+        if (StringUtils.hasText(request.getFullName()) && !request.getFullName().equals(user.getFullName())) {
+            user.setFullName(request.getFullName());
         }
-        if(StringUtils.hasLength(String.valueOf(request.getDob()))&&!request.getDob().equals(user.getDob())){
+
+        if (request.getDob() != null && !Objects.equals(request.getDob(), user.getDob())) {
             user.setDob(request.getDob());
         }
-        String avatarUrl=null;
-        if(avatarPdf!=null){
-            avatarUrl = cloudinaryService.uploadImage(avatarPdf);
+
+        if (StringUtils.hasText(request.getPhoneNumber()) && !request.getPhoneNumber().equals(user.getPhoneNumber())) {
+            user.setPhoneNumber(request.getPhoneNumber());
         }
-        user.setAvatarUrl(avatarUrl);
         userRepository.save(user);
         return UserResponse.convert(user);
+    }
+
+    @Override
+    public void banUser(Long userId) {
+        User user=userRepository.findById(userId)
+                .orElseThrow(()->new NotFoundException("User Not found"));
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unBanUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new NotFoundException("User not found"));
+        user.setActive(true);
+        userRepository.save(user);
     }
 
     @Override
@@ -194,4 +215,34 @@ public class UserServiceImpl implements UserService {
         return UserResponse.convert(user);
     }
 
+    @Override
+    public Double getDistance(Long userId, Long supplierId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new NotFoundException("User not found"));
+
+        Supplier supplier = supplierRepository.findById(supplierId)
+                .orElseThrow(()->new NotFoundException("User not found"));
+        if(user.getLatitude()==null||user.getLongitude()==null||supplier.getLatitude()==null||supplier.getLongitude()==null){
+            return 0.0;
+        }
+        return getDistance(user.getLatitude(),user.getLongitude(),supplier.getLatitude(),supplier.getLongitude());
+    }
+
+    private double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        final double DEG_TO_RAD = Math.PI / 180;
+        final double EARTH_RADIUS = 63710088;
+
+        double dLat = (lat2 - lat1) * DEG_TO_RAD;
+        double dLon = (lon2 - lon1) * DEG_TO_RAD;
+
+        double lat1Rad = lat1 * DEG_TO_RAD;
+        double lat2Rad = lat2 * DEG_TO_RAD;
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c;
+    }
 }

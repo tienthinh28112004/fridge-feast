@@ -37,9 +37,8 @@ public class CustomJwtDecoder implements JwtDecoder {
                     .withSecretKey(secretKeySpec) //truyền secretKeySpec vào
                     .macAlgorithm(MacAlgorithm.HS512) //thuật toán mã hóa
                     .build();
-            log.info("1");
+
         }
-        log.info("3");
         try {
             String email = jwtService.extractEmail(token);
             User user = userRepository.findByEmail(email)

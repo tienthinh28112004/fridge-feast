@@ -26,12 +26,12 @@ public class DishController {
     public ApiResponse<PageResponse<List<DishResponse>>> getDishWithSortAndMultiFieldAndSearch(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @RequestParam(required = false) List<String> sortBy,
+            @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String ...search
     ){
         return ApiResponse.<PageResponse<List<DishResponse>>>builder()
                 .message("Search dish")
-                .result(dishService.getDishlWithSortAndMultiFieldAndSearch(page,size,sortBy,search))
+                .result(dishService.getDishWithSortAndMultiFieldAndSearch(page,size,sortBy,search))
                 .build();
     }
     @PostMapping("/uploadDish")

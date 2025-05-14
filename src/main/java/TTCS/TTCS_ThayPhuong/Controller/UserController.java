@@ -56,16 +56,23 @@ public class UserController {
                 .result(userService.findById(userId))
                 .build();
     }
+    @GetMapping("/getDistance/{userId}/{supplierId}")
+    public ApiResponse<Double> getDistance(
+            @PathVariable("userId") final Long userId,
+            @PathVariable("supplierId") final Long supplierId) {
+        return ApiResponse.<Double>builder()
+                .message("Detail user")
+                .result(userService.getDistance(userId,supplierId))
+                .build();
+    }
 
     @PatchMapping("/update/{userId}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ApiResponse<UserResponse> updateUser(
-            @PathVariable("userId") Long userId,
-            @RequestPart @Valid UserUpdateRequest request,
-            @RequestPart(name = "avatarPdf", required = false) MultipartFile avatarPdf) {
+            @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .message("Update User successfully")
-                .result(userService.update(userId,request,avatarPdf))
+                .result(userService.update(request))
                 .build();
 
     }
@@ -97,6 +104,25 @@ public class UserController {
                 .message("User detail")
                 .result(userService.getMyInfo())
                 .build();
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/banUser/{userId}")
+    public ApiResponse<String> banUser(
+            @PathVariable("userId") final Long userId){
+        userService.banUser(userId);
+        return ApiResponse.<String>builder().
+                result("User has been deleted").
+                build();
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/unBanUser/{userId}")
+    public ApiResponse<String> unBanUser(
+            @PathVariable("userId") final Long userId){
+        userService.unBanUser(userId);
+        return ApiResponse.<String>builder().
+                result("User has been deleted").
+                build();
     }
 }
 

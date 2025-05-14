@@ -15,10 +15,8 @@ import TTCS.TTCS_ThayPhuong.Exception.AccessDeniedException;
 import TTCS.TTCS_ThayPhuong.Exception.BadRequestException;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Exception.TokenExpireException;
-import TTCS.TTCS_ThayPhuong.Repository.IngredientRepository;
-import TTCS.TTCS_ThayPhuong.Repository.SupplierHasIngredientRepository;
-import TTCS.TTCS_ThayPhuong.Repository.SupplierRepository;
-import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
+import TTCS.TTCS_ThayPhuong.Repository.*;
+import TTCS.TTCS_ThayPhuong.Repository.Criteria.SearchCriteria;
 import TTCS.TTCS_ThayPhuong.Service.IngredientBySupplierService;
 import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import TTCS.TTCS_ThayPhuong.Util.SecurityUtils;
@@ -36,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class IngredientBySupplierServiceImpl implements IngredientBySupplierService {
+    private final SearchRepository searchRepository;
     private final UserRepository userRepository;
     private final SupplierRepository supplierRepository;
     private final IngredientRepository ingredientRepository;
@@ -86,7 +85,7 @@ public class IngredientBySupplierServiceImpl implements IngredientBySupplierServ
     }
 
     @Override
-    public PageResponse<List<IngredientDetailResponse>> getIngredientWithSortAndMultiFieldAndSearch(int page, int size, String keyword, String... sortBy) {
-        return null;
+    public PageResponse<List<IngredientDetailResponse>> getIngredientWithSortAndMultiFieldAndSearch(int page, int size, String sortBy, String... search) {
+        return searchRepository.getIngredientWithSortMultiFieldAndSearch(page, size,sortBy,search);
     }
 }

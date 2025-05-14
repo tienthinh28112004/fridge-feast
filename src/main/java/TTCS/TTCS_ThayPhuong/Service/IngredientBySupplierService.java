@@ -11,5 +11,5 @@ public interface IngredientBySupplierService {
     IngredientDetailResponse supplierUpLoadIngredient(SupplierHasIngredientRequest request);
     IngredientDetailResponse getIngredientDetailId(Long id);
     PageResponse<List<IngredientDetailResponse>> getAllIngredientBySupplier(int page, int size);
-    PageResponse<List<IngredientDetailResponse>> getIngredientWithSortAndMultiFieldAndSearch(int page, int size, String keyword, String...sortBy);
+    PageResponse<List<IngredientDetailResponse>> getIngredientWithSortAndMultiFieldAndSearch(int page, int size, String sortBy, String...search);
 }

@@ -14,8 +14,12 @@ public interface UserService {
     UserResponse createUser(UserCreateRequest request);
     PageResponse<List<UserResponse>> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize, String... sorts);
     UserResponse findById(Long id);
-    UserResponse update(Long userId, UserUpdateRequest request, MultipartFile avatarPdf);
+    UserResponse update(UserUpdateRequest request);
+    void banUser(Long userId);
+    void unBanUser(Long userId);
     void delete(Long userId);
     UserResponse changePassword(ChangePasswordRequest request);
     UserResponse getMyInfo();
+
+    Double getDistance(Long userId,Long supplierId);
 }

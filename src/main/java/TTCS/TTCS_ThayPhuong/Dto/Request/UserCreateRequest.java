@@ -24,4 +24,8 @@ public class UserCreateRequest {
     @NotBlank
     @CustomPasswordValidator()
     private String password;
+
+    private Double longitude;
+
+    private Double latitude;
 }

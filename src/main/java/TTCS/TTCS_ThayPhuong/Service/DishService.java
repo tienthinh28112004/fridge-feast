@@ -12,7 +12,5 @@ public interface DishService {
     DishResponse uploadDish(DishCreationRequest request, MultipartFile dishImage);
     DishResponse getDishId(Long dishId);
     PageResponse<List<DishResponse>> getAllDish(int page, int size);
-    PageResponse<List<DishResponse>> getDishlWithSortAndMultiFieldAndSearch(int page, int size, List<String> sortBy, String...search);
-    PageResponse<List<DishResponse>> getDishWithSortAndSearchByKeyword(int page, int size, String keyword);
-
+    PageResponse<List<DishResponse>> getDishWithSortAndMultiFieldAndSearch(int page, int size, String sortBy, String...search);
 }

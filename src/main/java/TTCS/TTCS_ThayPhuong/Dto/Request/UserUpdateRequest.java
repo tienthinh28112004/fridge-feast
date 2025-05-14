@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class UserUpdateRequest {
+    private String fullName;
     @NotBlank
     @MinSizeValidator(min=9)
     private String phoneNumber;

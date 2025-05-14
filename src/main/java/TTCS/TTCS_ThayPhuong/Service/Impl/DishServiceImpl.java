@@ -8,6 +8,7 @@ import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Repository.CategoryRepository;
 import TTCS.TTCS_ThayPhuong.Repository.DishRepository;
 import TTCS.TTCS_ThayPhuong.Repository.IngredientRepository;
+import TTCS.TTCS_ThayPhuong.Repository.SearchRepository;
 import TTCS.TTCS_ThayPhuong.Service.DishService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class DishServiceImpl implements DishService {
+    private final SearchRepository searchRepository;
     private final DishRepository dishRepository;
     private final CloudinaryService cloudinaryService;
     private final CategoryRepository categoryRepository;
@@ -94,12 +96,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public PageResponse<List<DishResponse>> getDishlWithSortAndMultiFieldAndSearch(int page, int size, List<String> sortBy, String... search) {
-        return null;
-    }
-
-    @Override
-    public PageResponse<List<DishResponse>> getDishWithSortAndSearchByKeyword(int page, int size, String keyword) {
-        return null;
+    public PageResponse<List<DishResponse>> getDishWithSortAndMultiFieldAndSearch(int page, int size, String sortBy, String... search) {
+        return searchRepository.getDishWithSortMultiFieldAndSearch(page, size, sortBy, search);
     }
 }
