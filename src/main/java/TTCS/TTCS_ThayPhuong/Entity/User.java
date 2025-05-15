@@ -1,5 +1,7 @@
 package TTCS.TTCS_ThayPhuong.Entity;
 
+import TTCS.TTCS_ThayPhuong.Enums.OrderStatus;
+import TTCS.TTCS_ThayPhuong.Enums.StatusRegisterSupplier;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +30,9 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "password")
     private String password;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -40,11 +45,25 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "resume_url")
+    private String resumeUrl;
+
+    @Column(name = "certificate")
+    private String certificate;
+
+    @Column(name = "facebook_link")
+    private String facebookLink;
+
     @Column(name = "latitude")
     private Double latitude;
 
     @Column(name = "longitude")
     private Double longitude;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_register_supplier")
+    private StatusRegisterSupplier statusRegisterSupplier;
+
 
     @Column(name = "refresh_token", columnDefinition = "TEXT")
     private String refreshToken;

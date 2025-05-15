@@ -25,8 +25,8 @@ public class IngredientController {
     @PostMapping("/addIngredient")
     //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> addIngredient(
-            @RequestPart MultipartFile ingredientPdf,
-            @RequestPart IngredientCreateRequest request
+            @RequestPart IngredientCreateRequest request,
+            @RequestPart MultipartFile ingredientPdf
     ){
         return ApiResponse.<IngredientResponse>builder()
                 .message("Add ingredient successfully")

@@ -1,31 +1,23 @@
 package TTCS.TTCS_ThayPhuong.Service.Impl;
 
-import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientCreateRequest;
-import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.SupplierHasIngredientRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientDetailResponse;
-import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
 import TTCS.TTCS_ThayPhuong.Entity.Ingredient;
-import TTCS.TTCS_ThayPhuong.Entity.Supplier;
 import TTCS.TTCS_ThayPhuong.Entity.SupplierHasIngredient;
 import TTCS.TTCS_ThayPhuong.Entity.User;
 import TTCS.TTCS_ThayPhuong.Enums.StatusRegisterSupplier;
 import TTCS.TTCS_ThayPhuong.Exception.AccessDeniedException;
-import TTCS.TTCS_ThayPhuong.Exception.BadRequestException;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Exception.TokenExpireException;
 import TTCS.TTCS_ThayPhuong.Repository.*;
-import TTCS.TTCS_ThayPhuong.Repository.Criteria.SearchCriteria;
 import TTCS.TTCS_ThayPhuong.Service.IngredientBySupplierService;
-import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import TTCS.TTCS_ThayPhuong.Util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +28,6 @@ import java.util.stream.Collectors;
 public class IngredientBySupplierServiceImpl implements IngredientBySupplierService {
     private final SearchRepository searchRepository;
     private final UserRepository userRepository;
-    private final SupplierRepository supplierRepository;
     private final IngredientRepository ingredientRepository;
     private final SupplierHasIngredientRepository supplierHasIngredientRepository;
 
@@ -46,14 +37,13 @@ public class IngredientBySupplierServiceImpl implements IngredientBySupplierServ
                 .orElseThrow(() -> new TokenExpireException("Bạn chưa đăng nhập"));
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        Supplier supplier = supplierRepository.findByUser(user);
-        if(!Objects.equals(supplier.getStatusRegisterSupplier(), StatusRegisterSupplier.APPROVED)){
+        if(!Objects.equals(user.getStatusRegisterSupplier(), StatusRegisterSupplier.APPROVED)){
             throw new AccessDeniedException("Tài khoản của bạn chưa được kích hoạt");
         }
         Ingredient ingredient = ingredientRepository.findById(request.getIngredientId())
                 .orElseThrow(()->new NotFoundException("Ingredient not found"));
         SupplierHasIngredient hasIngredient=SupplierHasIngredient.builder()
-                .supplier(supplier)
+                .supplier(user)
                 .ingredient(ingredient)
                 .price(request.getPrice())
                 .stock(request.getStock())

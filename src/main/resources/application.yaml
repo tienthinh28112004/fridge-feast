@@ -5,7 +5,7 @@ spring:
   application:
     name: FridgeFeast
   datasource:
-    url: jdbc:mysql://localhost:3306/FridgeFeast
+    url: jdbc:mysql://localhost:3306/TestPostman
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: admin

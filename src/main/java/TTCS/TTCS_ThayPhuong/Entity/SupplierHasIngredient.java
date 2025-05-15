@@ -24,7 +24,7 @@ public class SupplierHasIngredient extends AbstractEntity<Long>{
     @ManyToOne
     @JoinColumn(name = "supplier_id",nullable = false)
     @JsonBackReference
-    private Supplier supplier;
+    private User supplier;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id",nullable = false)

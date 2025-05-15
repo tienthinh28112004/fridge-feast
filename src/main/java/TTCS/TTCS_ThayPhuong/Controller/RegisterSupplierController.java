@@ -2,7 +2,7 @@ package TTCS.TTCS_ThayPhuong.Controller;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserRegisterSupplierRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
-import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Service.RegisterSupplierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +22,34 @@ public class RegisterSupplierController {
     private final RegisterSupplierService registerSupplierService;
     @GetMapping("/getAllSupplier")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<List<SupplierResponse>> getAllSupplier(){
-        return ApiResponse.<List<SupplierResponse>>builder()
+    public ApiResponse<List<UserResponse>> getAllSupplier(
+            @RequestParam(required = false) int page,
+            @RequestParam(required = false) int size
+    ){
+        return ApiResponse.<List<UserResponse>>builder()
                 .message("Get all supplier")
-                .result(registerSupplierService.getAll())
+                .result(registerSupplierService.getAll(page,size))
+                .build();
+    }
+
+    @GetMapping("/getAllSupplierStatus")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<List<UserResponse>> getAllSupplierStatus(
+            @RequestParam(required = false) int page,
+            @RequestParam(required = false) int size,
+            @RequestParam(required = false) String status
+    ){
+        return ApiResponse.<List<UserResponse>>builder()
+                .message("Get all supplier")
+                .result(registerSupplierService.getAllStatus(page, size,status))
                 .build();
     }
     @PatchMapping("/acceptSupplier/{supplierId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<SupplierResponse> acceptSupplier(
+    public ApiResponse<UserResponse> acceptSupplier(
             @PathVariable("supplierId") Long supplierId
     ){
-        return ApiResponse.<SupplierResponse>builder()
+        return ApiResponse.<UserResponse>builder()
                 .message("Accept supplier")
                 .result(registerSupplierService.acceptSupplier(supplierId))
                 .build();
@@ -41,10 +57,10 @@ public class RegisterSupplierController {
 
     @PatchMapping("/rejectSupplier/{supplierId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<SupplierResponse> rejectSupplier(
+    public ApiResponse<UserResponse> rejectSupplier(
             @PathVariable("supplierId") Long supplierId
     ) {
-        return ApiResponse.<SupplierResponse>builder()
+        return ApiResponse.<UserResponse>builder()
                 .message("Reject supplier")
                 .result(registerSupplierService.rejectSupplier(supplierId))
                 .build();
@@ -52,12 +68,12 @@ public class RegisterSupplierController {
 
     @PostMapping("/registerSupplier")
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<SupplierResponse> registerSupplier(
+    public ApiResponse<UserResponse> registerSupplier(
             @RequestPart @Validated UserRegisterSupplierRequest request,
             @RequestPart(required = false) MultipartFile avatarPdf,
             @RequestPart(required = false) MultipartFile resumePdf
     ){
-        return ApiResponse.<SupplierResponse>builder()
+        return ApiResponse.<UserResponse>builder()
                 .message("Register supplier")
                 .result(registerSupplierService.registerSupplier(avatarPdf,resumePdf,request))
                 .build();

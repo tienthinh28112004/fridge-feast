@@ -22,7 +22,7 @@ public class IngredientDetailResponse {
                 .ingredientId(hasIngredient.getIngredient().getId())
                 .supplierId(hasIngredient.getSupplier().getId())
                 .nameIngredient(hasIngredient.getIngredient().getName())
-                .supplierName(hasIngredient.getSupplier().getSupplierName())
+                .supplierName(hasIngredient.getSupplier().getFullName())
                 .ingredientUrl(hasIngredient.getIngredient().getIngredientImage())
                 .priceIngredient(hasIngredient.getPrice())
                 .stock(hasIngredient.getStock())

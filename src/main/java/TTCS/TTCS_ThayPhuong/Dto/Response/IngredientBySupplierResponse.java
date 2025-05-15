@@ -29,7 +29,7 @@ public class IngredientBySupplierResponse implements Serializable {
                 .priceIngredient(cartDetail.getSupplierHasIngredient().getPrice())
                 .thumbnail(cartDetail.getSupplierHasIngredient().getIngredient().getIngredientImage())
                 .quantity(cartDetail.getQuantity())
-                .supplierName(cartDetail.getSupplierHasIngredient().getSupplier().getSupplierName())
+                .supplierName(cartDetail.getSupplierHasIngredient().getSupplier().getFullName())
                 .nameIngredient(cartDetail.getSupplierHasIngredient().getIngredient().getName())
                 .totalPrice(cartDetail.getTotalMoneyIngedient())
                 .build();
@@ -41,7 +41,7 @@ public class IngredientBySupplierResponse implements Serializable {
                 .priceIngredient(orderDetail.getSupplierHasIngredient().getPrice())
                 .thumbnail(orderDetail.getSupplierHasIngredient().getIngredient().getIngredientImage())
                 .quantity(orderDetail.getQuantity())
-                .supplierName(orderDetail.getSupplierHasIngredient().getSupplier().getSupplierName())
+                .supplierName(orderDetail.getSupplierHasIngredient().getSupplier().getFullName())
                 .nameIngredient(orderDetail.getSupplierHasIngredient().getIngredient().getName())
                 .totalPrice(orderDetail.getTotalMoneyIngredient())
                 .build();

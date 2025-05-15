@@ -11,7 +11,6 @@ import TTCS.TTCS_ThayPhuong.Exception.BadRequestException;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Exception.TokenExpireException;
 import TTCS.TTCS_ThayPhuong.Repository.RolesRepository;
-import TTCS.TTCS_ThayPhuong.Repository.SupplierRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
 import TTCS.TTCS_ThayPhuong.Service.EmailVerificationTokenService;
 import TTCS.TTCS_ThayPhuong.Service.UserService;
@@ -26,7 +25,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -40,7 +38,6 @@ public class UserServiceImpl implements UserService {
     private final RolesRepository rolesRepository;
     private final UserRepository userRepository;
     private final MailSenderService mailSenderService;
-    private final SupplierRepository supplierRepository;
     private final EmailVerificationTokenService emailVerificationTokenService;
     @Override
     public UserResponse createUser(UserCreateRequest request) {
@@ -220,7 +217,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new NotFoundException("User not found"));
 
-        Supplier supplier = supplierRepository.findById(supplierId)
+        User supplier = userRepository.findById(supplierId)
                 .orElseThrow(()->new NotFoundException("User not found"));
         if(user.getLatitude()==null||user.getLongitude()==null||supplier.getLatitude()==null||supplier.getLongitude()==null){
             return 0.0;
@@ -246,3 +243,7 @@ public class UserServiceImpl implements UserService {
         return EARTH_RADIUS * c;
     }
 }
+
+// User có bảng supplier
+// supplier là 1 user khác user bình thường là nó được add nâng quyền lên supplier
+// supplier có chức năng thêm sản phẩm quản lý sản phẩm

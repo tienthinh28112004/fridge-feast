@@ -28,8 +28,5 @@ public class UserRegisterSupplierRequest {
 //
 //    private String resumeUrl;//được cập nhật trong controller
 
-    private Double latitude;
-
-    private Double longitude;
 
 }

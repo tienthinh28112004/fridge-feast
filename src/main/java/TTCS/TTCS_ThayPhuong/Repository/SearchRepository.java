@@ -32,6 +32,9 @@ public class SearchRepository {
     private EntityManager entityManager;
 
     public PageResponse<List<IngredientDetailResponse>> getIngredientWithSortMultiFieldAndSearch(int page,int size,String sortBy,String ...search){
+        //tên nhà cung cấp,tên nguyên liệu,mô tả nguyên liệu,địa chỉ nhà cung cấp
+        //keyword: vcfghdsgfchd   price>200000  price<300000 stock>20
+        //sortBy price:desc stock:asc
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SupplierHasIngredient> criteriaQuery = criteriaBuilder.createQuery(SupplierHasIngredient.class);
         Root<SupplierHasIngredient> root = criteriaBuilder.createQuery().from(SupplierHasIngredient.class);
@@ -75,6 +78,8 @@ public class SearchRepository {
                 .build();
     }
     public PageResponse<List<DishResponse>> getDishWithSortMultiFieldAndSearch(int page,int size,String sortBy,String ...search){
+        //page=1&size=12&
+//        timeCook:desc,price:asc
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Dish> criteriaQuery = criteriaBuilder.createQuery(Dish.class);
         Root<Dish> root = criteriaQuery.from(Dish.class);
@@ -141,6 +146,8 @@ public class SearchRepository {
 
                 if(matcher.find()){
                     if(matcher.group(1).equalsIgnoreCase("keyword")) {
+                        //keyword: trứng,thịt lơn,cá      category:ăn sáng   price>20000  timeCoke < 180
+                        //=>list món ăn
                         String[] ingredientList=matcher.group(3).split(",");
                         for(String x:ingredientList) {
                             Predicate likeToName = criteriaBuilder.like(root.get("name"), "%" + x + "%");
@@ -183,7 +190,7 @@ public class SearchRepository {
         Predicate predicate = criteriaBuilder.conjunction();//khởi tạo predicate là true
 
         Join<SupplierHasIngredient, Ingredient> hasIngredientJoin=root.join("ingredient");
-        Join<SupplierHasIngredient, Supplier> hasSupplierJoin=root.join("supplier");
+        Join<SupplierHasIngredient, User> hasSupplierJoin=root.join("supplier");
 
         List<SearchCriteria> criteriaList = new ArrayList<>();
         if(search != null){
@@ -196,7 +203,7 @@ public class SearchRepository {
                         Predicate likeToName = criteriaBuilder.like(hasIngredientJoin.get("name"), "%" + matcher.group(3) + "%");
                         Predicate likeToDescription = criteriaBuilder.like(hasIngredientJoin.get("description"), "%" + matcher.group(3) + "%");
 
-                        Predicate likeToSupplierName = criteriaBuilder.like(hasSupplierJoin.get("supplierName"), "%" + matcher.group(3) + "%");
+                        Predicate likeToSupplierName = criteriaBuilder.like(hasSupplierJoin.get("fullName"), "%" + matcher.group(3) + "%");
                         Predicate likeToAddress = criteriaBuilder.like(hasSupplierJoin.get("address"), "%" + matcher.group(3) + "%");
 
                         Predicate finalPredicate = criteriaBuilder.or(likeToName, likeToSupplierName, likeToAddress, likeToDescription);

@@ -1,17 +1,19 @@
 package TTCS.TTCS_ThayPhuong.Service;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserRegisterSupplierRequest;
-import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface RegisterSupplierService {
-    List<SupplierResponse> getAll();
+    List<UserResponse> getAll(int page,int size);
 
-    SupplierResponse registerSupplier(MultipartFile avatarPdf, MultipartFile resumePdf, UserRegisterSupplierRequest request);
+    List<UserResponse> getAllStatus(int page,int size,String status);
 
-    SupplierResponse acceptSupplier(Long supplierId);
+    UserResponse registerSupplier(MultipartFile avatarPdf, MultipartFile resumePdf, UserRegisterSupplierRequest request);
 
-    SupplierResponse rejectSupplier(Long supplierId);
+    UserResponse acceptSupplier(Long supplierId);
+
+    UserResponse rejectSupplier(Long supplierId);
 }
