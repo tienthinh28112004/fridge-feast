@@ -4,6 +4,7 @@ import TTCS.TTCS_ThayPhuong.Dto.Request.ChangePasswordRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierApplicationDetailResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public interface UserService {
     void delete(Long userId);
     UserResponse changePassword(ChangePasswordRequest request);
     UserResponse getMyInfo();
-
     Double getDistance(Long userId,Long supplierId);
+
+    SupplierApplicationDetailResponse getUserApplicationDetail(Long userId);
 }

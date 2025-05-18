@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 public class IngredientBySupplierController {
     private final IngredientBySupplierService ingredientBySupplierService;
-    @GetMapping("/getIngredientById/{ingredientId}")
+    @GetMapping("/getIngredientSupplierById/{ingredientId}")
     public ApiResponse<IngredientDetailResponse> getIngredientById(
             @PathVariable("ingredientId") Long ingredientId
     ){

@@ -4,6 +4,7 @@ import TTCS.TTCS_ThayPhuong.Dto.Request.ChangePasswordRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierApplicationDetailResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Entity.*;
 import TTCS.TTCS_ThayPhuong.Enums.Role;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -223,6 +225,14 @@ public class UserServiceImpl implements UserService {
             return 0.0;
         }
         return getDistance(user.getLatitude(),user.getLongitude(),supplier.getLatitude(),supplier.getLongitude());
+    }
+
+    @Transactional(readOnly = true)
+    public SupplierApplicationDetailResponse getUserApplicationDetail(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new NotFoundException("User not found"));
+
+        return SupplierApplicationDetailResponse.convert(user);
     }
 
     private double getDistance(double lat1, double lon1, double lat2, double lon2) {

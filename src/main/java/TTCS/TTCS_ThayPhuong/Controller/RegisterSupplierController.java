@@ -2,6 +2,7 @@ package TTCS.TTCS_ThayPhuong.Controller;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserRegisterSupplierRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserRegisterSupplierResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Service.RegisterSupplierService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,10 @@ public class RegisterSupplierController {
     private final RegisterSupplierService registerSupplierService;
     @GetMapping("/getAllSupplier")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<List<UserResponse>> getAllSupplier(
-            @RequestParam(required = false) int page,
-            @RequestParam(required = false) int size
-    ){
-        return ApiResponse.<List<UserResponse>>builder()
+    public ApiResponse<List<UserRegisterSupplierResponse>> getAllSupplier(){
+        return ApiResponse.<List<UserRegisterSupplierResponse>>builder()
                 .message("Get all supplier")
-                .result(registerSupplierService.getAll(page,size))
+                .result(registerSupplierService.getAll())
                 .build();
     }
 
@@ -46,10 +44,10 @@ public class RegisterSupplierController {
     }
     @PatchMapping("/acceptSupplier/{supplierId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<UserResponse> acceptSupplier(
+    public ApiResponse<UserRegisterSupplierResponse> acceptSupplier(
             @PathVariable("supplierId") Long supplierId
     ){
-        return ApiResponse.<UserResponse>builder()
+        return ApiResponse.<UserRegisterSupplierResponse>builder()
                 .message("Accept supplier")
                 .result(registerSupplierService.acceptSupplier(supplierId))
                 .build();
@@ -57,10 +55,10 @@ public class RegisterSupplierController {
 
     @PatchMapping("/rejectSupplier/{supplierId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<UserResponse> rejectSupplier(
+    public ApiResponse<UserRegisterSupplierResponse> rejectSupplier(
             @PathVariable("supplierId") Long supplierId
     ) {
-        return ApiResponse.<UserResponse>builder()
+        return ApiResponse.<UserRegisterSupplierResponse>builder()
                 .message("Reject supplier")
                 .result(registerSupplierService.rejectSupplier(supplierId))
                 .build();
@@ -68,14 +66,14 @@ public class RegisterSupplierController {
 
     @PostMapping("/registerSupplier")
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<UserResponse> registerSupplier(
+    public ApiResponse<UserRegisterSupplierResponse> registerSupplier(
             @RequestPart @Validated UserRegisterSupplierRequest request,
-            @RequestPart(required = false) MultipartFile avatarPdf,
-            @RequestPart(required = false) MultipartFile resumePdf
+            @RequestPart(required = false) MultipartFile cv,
+            @RequestPart(required = false) MultipartFile certificate
     ){
-        return ApiResponse.<UserResponse>builder()
+        return ApiResponse.<UserRegisterSupplierResponse>builder()
                 .message("Register supplier")
-                .result(registerSupplierService.registerSupplier(avatarPdf,resumePdf,request))
+                .result(registerSupplierService.registerSupplier(request,cv,certificate))
                 .build();
     }
 }

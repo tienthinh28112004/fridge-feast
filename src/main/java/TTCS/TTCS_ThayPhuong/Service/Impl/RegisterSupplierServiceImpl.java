@@ -1,6 +1,7 @@
 package TTCS.TTCS_ThayPhuong.Service.Impl;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserRegisterSupplierRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserRegisterSupplierResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Entity.Roles;
 import TTCS.TTCS_ThayPhuong.Entity.User;
@@ -22,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,12 +42,21 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
     private final RolesRepository rolesRepository;
     @Override
     @Transactional
-    public List<UserResponse> getAll(int page,int size) {
-        Pageable pageable= PageRequest.of(page-1,size);
-        List<User> supplierList=userRepository.findBySupplierAll(pageable);
-        return supplierList.stream().map(UserResponse::convert).collect(Collectors.toList());
-
+    public List<UserRegisterSupplierResponse> getAll() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        log.info("Lấy được danh sách các tác gải thành công");
+        return userRepository.findAll(sort)
+                .stream()
+                .filter(user ->
+                        user != null &&
+                                user.getStatusRegisterSupplier() != null &&  // Add null check
+                                StatusRegisterSupplier.PENDING.equals(user.getStatusRegisterSupplier()) &&
+                                user.getUserHasRoles() != null &&
+                                !user.getUserHasRoles().isEmpty())
+                .map(UserRegisterSupplierResponse::convert)
+                .collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional
@@ -56,37 +68,42 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
 
     @Override
     @Transactional
-    public UserResponse registerSupplier(MultipartFile avatarPdf, MultipartFile resumePdf, UserRegisterSupplierRequest request) {
+    public UserRegisterSupplierResponse registerSupplier(UserRegisterSupplierRequest request,
+                                                     MultipartFile cv,
+                                                     MultipartFile certificate){
         String email= SecurityUtils.getCurrentLogin()
-                .orElseThrow(()->new TokenExpireException("Bạn chưa đăng nhập"));
-        User user=userRepository.findByEmail(email)
+                .orElseThrow(()->new BadCredentialsException("email invalid"));
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new NotFoundException("User not found"));
-        if(StringUtils.isNotBlank(user.getPhoneNumber())&& !Objects.equals(user.getPhoneNumber(),request.getPhoneNumber())){
-            throw new BadRequestException("Vui lòng nhập số điện thoại trùng với số ddienj thoaại bạn đã đăng kí");
-        }
-        String avatarUrl=null;
-        if(avatarPdf!=null){
-            avatarUrl=cloudinaryService.uploadImage(avatarPdf);
-        }
-        String resumeUrl=null;
-        if(resumePdf!=null){
-            resumeUrl=cloudinaryService.uploadImage(resumePdf);
-        }
-        user.setAvatarUrl(avatarUrl);
-        user.setResumeUrl(resumeUrl);
-        user.setFullName(request.getSupplierName());
-        user.setAddress(request.getAddress());
-        user.setFacebookLink(request.getFacebookLink());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setStatusRegisterSupplier(StatusRegisterSupplier.PENDING);
-        userRepository.save(user);
-        return UserResponse.convert(user);
 
+        if(user.getStatusRegisterSupplier() == null || user.getStatusRegisterSupplier().equals(StatusRegisterSupplier.REJECTED)){
+            String cvUrl=null;
+            if(cv!=null){
+                cvUrl = cloudinaryService.uploadImage(cv);
+            }
+            String certificateUrl=null;
+            if(certificate!=null){
+                certificateUrl= cloudinaryService.uploadImage(certificate);
+            }
+            user.setBio(request.getBio());
+            user.setFacebookLink(request.getFacebookLink());
+            user.setCvUrl(cvUrl);
+            user.setCertificate(certificateUrl);
+            user.setEmail(request.getEmail());
+            user.setPhoneNumber(request.getPhone());
+            user.setExpertise(request.getExpertise());
+            user.setYearsOfExperience(request.getYearsOfExperience());
+            user.setFullName(request.getName());
+            user.setStatusRegisterSupplier(StatusRegisterSupplier.PENDING);
+
+            userRepository.save(user);
+        }
+        return UserRegisterSupplierResponse.convert(user);
     }
 
     @Override
     @Transactional
-    public UserResponse acceptSupplier(Long supplierId) {
+    public UserRegisterSupplierResponse acceptSupplier(Long supplierId) {
         User supplier=userRepository.findById(supplierId)
                 .orElseThrow(()->new NotFoundException("Supplier not found"));
         if(!Objects.equals(supplier.getStatusRegisterSupplier(),StatusRegisterSupplier.APPROVED)){
@@ -102,12 +119,12 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
             supplier.getUserHasRoles().add(userHasRole);
             userRepository.save(supplier);
         }
-        return UserResponse.convert(supplier);
+        return UserRegisterSupplierResponse.convert(supplier);
     }
 
     @Override
     @Transactional
-    public UserResponse rejectSupplier(Long supplierId) {
+    public UserRegisterSupplierResponse rejectSupplier(Long supplierId) {
         User supplier = userRepository.findById(supplierId)
                 .orElseThrow(() -> new NotFoundException("Supplier not found"));
 
@@ -126,6 +143,6 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
             userRepository.save(supplier);
         }
 
-        return UserResponse.convert(supplier);
+        return UserRegisterSupplierResponse.convert(supplier);
     }
 }

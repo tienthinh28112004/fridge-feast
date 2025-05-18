@@ -45,25 +45,33 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @Column(name = "resume_url")
-    private String resumeUrl;
-
-    @Column(name = "certificate")
-    private String certificate;
-
-    @Column(name = "facebook_link")
-    private String facebookLink;
-
     @Column(name = "latitude")
     private Double latitude;
 
     @Column(name = "longitude")
     private Double longitude;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_register_supplier")
-    private StatusRegisterSupplier statusRegisterSupplier;
+    @Column(name = "expertise")
+    private String expertise;
 
+    @Column(name = "yearsOfExperience")
+    private Double yearsOfExperience;
+
+    @Column(name = "bio")
+    private String bio;
+
+    @Column(name = "certificate")
+    private String certificate;
+
+    @Column(name = "cvUrl")
+    private String cvUrl;
+
+    @Column(name = "facebookLink")
+    private String facebookLink;
+
+    @Column(name = "registrationStatus")
+    @Enumerated(EnumType.STRING)
+    private StatusRegisterSupplier statusRegisterSupplier;
 
     @Column(name = "refresh_token", columnDefinition = "TEXT")
     private String refreshToken;

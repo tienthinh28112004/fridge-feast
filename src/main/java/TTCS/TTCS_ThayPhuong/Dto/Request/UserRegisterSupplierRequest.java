@@ -2,31 +2,20 @@ package TTCS.TTCS_ThayPhuong.Dto.Request;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRegisterSupplierRequest {
-    @NotBlank(message = "supplierName cannot be null")
-    private String supplierName;
-
-    @NotBlank(message = "address cannot be null")
-    private String address;
-
-    @NotBlank(message = "facebookLink cannot be null")
+    private String email;
+    private String name;
+    private String phone;
+    private String expertise;
+    private Double yearsOfExperience;
+    private String bio;
     private String facebookLink;
-
-    @NotBlank(message = "phoneNumber cannot be null")
-    private String phoneNumber;
-
-//    private String avatarUrl;được cập nhật trong controller
-//
-//    private String resumeUrl;//được cập nhật trong controller
-
-
 }
+

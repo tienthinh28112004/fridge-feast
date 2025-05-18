@@ -37,7 +37,7 @@ public class SearchRepository {
         //sortBy price:desc stock:asc
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SupplierHasIngredient> criteriaQuery = criteriaBuilder.createQuery(SupplierHasIngredient.class);
-        Root<SupplierHasIngredient> root = criteriaBuilder.createQuery().from(SupplierHasIngredient.class);
+        Root<SupplierHasIngredient> root = criteriaQuery.from(SupplierHasIngredient.class);
 
         Predicate predicate = getPredicateIngredient(criteriaBuilder,root,search);
 
@@ -69,11 +69,13 @@ public class SearchRepository {
                 .getResultList();
 
         Long totalElements = getTotalElementsIngredient(search);
+        log.info("total: {}",totalElements);
 
         return PageResponse.<List<IngredientDetailResponse>>builder()
                 .currentPage(page)
                 .pageSize(size)
                 .totalPages((int) Math.ceil((double) totalElements / size))
+                .totalElements(totalElements)
                 .items(supplierHasIngredientList.stream().map(IngredientDetailResponse::convert).collect(Collectors.toList()))
                 .build();
     }
@@ -186,39 +188,38 @@ public class SearchRepository {
         //lấy ra số tổng số lượng phần tử lấy được
         return entityManager.createQuery(query).getSingleResult();
     }
-    private Predicate getPredicateIngredient(CriteriaBuilder criteriaBuilder,Root root,String ...search){
+    private Predicate getPredicateIngredient(CriteriaBuilder criteriaBuilder, Root root, String... search) {
         Predicate predicate = criteriaBuilder.conjunction();//khởi tạo predicate là true
 
-        Join<SupplierHasIngredient, Ingredient> hasIngredientJoin=root.join("ingredient");
-        Join<SupplierHasIngredient, User> hasSupplierJoin=root.join("supplier");
+        Join<SupplierHasIngredient,Ingredient> ingredientJoin = root.join("ingredient");
+
 
         List<SearchCriteria> criteriaList = new ArrayList<>();
-        if(search != null){
-            for(String s:search){
+        if (search != null) {
+            for (String s : search) {
                 Pattern pattern = Pattern.compile("(\\w+?)([:<>?])(.*)");
                 Matcher matcher = pattern.matcher(s);
 
-                if(matcher.find()){
-                    if(matcher.group(1).equalsIgnoreCase("keyword")) {
-                        Predicate likeToName = criteriaBuilder.like(hasIngredientJoin.get("name"), "%" + matcher.group(3) + "%");
-                        Predicate likeToDescription = criteriaBuilder.like(hasIngredientJoin.get("description"), "%" + matcher.group(3) + "%");
+                if (matcher.find()) {
+                    if (matcher.group(1).equalsIgnoreCase("keyword")) {
 
-                        Predicate likeToSupplierName = criteriaBuilder.like(hasSupplierJoin.get("fullName"), "%" + matcher.group(3) + "%");
-                        Predicate likeToAddress = criteriaBuilder.like(hasSupplierJoin.get("address"), "%" + matcher.group(3) + "%");
+                            Predicate likeToName = criteriaBuilder.like(ingredientJoin.get("name"), "%" + matcher.group(3) + "%");
+                            Predicate likeToDescription = criteriaBuilder.like(ingredientJoin.get("description"), "%" + matcher.group(3) + "%");
 
-                        Predicate finalPredicate = criteriaBuilder.or(likeToName, likeToSupplierName, likeToAddress, likeToDescription);
-                        predicate = criteriaBuilder.and(predicate, finalPredicate);
-                    }else{
+                            Predicate finalPre = criteriaBuilder.or(likeToName,likeToDescription);
+                            predicate = criteriaBuilder.and(predicate, finalPre);
+
+                    }  else {
                         //các trường còn lại như giá stock xử lý ởdđây
-                        criteriaList.add(new SearchCriteria(matcher.group(1), matcher.group(2),matcher.group(3)));
+                        criteriaList.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
                     }
                 }
             }
         }
         //Xác định queryConsummer với giá trị ban đầu
-        SearchCriteriaQueryConsumer queryConsumer = new SearchCriteriaQueryConsumer(criteriaBuilder,root,predicate);
+        SearchCriteriaQueryConsumer queryConsumer = new SearchCriteriaQueryConsumer(criteriaBuilder, root, predicate);
 
-        if(!criteriaList.isEmpty()){
+        if (!criteriaList.isEmpty()) {
             criteriaList.forEach(queryConsumer);
             predicate = criteriaBuilder.and(predicate, queryConsumer.getPredicate());
         }

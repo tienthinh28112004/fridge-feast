@@ -6,6 +6,7 @@ import TTCS.TTCS_ThayPhuong.Dto.Request.UserCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierApplicationDetailResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Service.UserService;
 import jakarta.validation.Valid;
@@ -122,6 +123,15 @@ public class UserController {
         userService.unBanUser(userId);
         return ApiResponse.<String>builder().
                 result("User has been deleted").
+                build();
+    }
+
+    @GetMapping("/{userId}/details")
+    public ApiResponse<SupplierApplicationDetailResponse> getUserApplicationDetail(@PathVariable Long userId) {
+        SupplierApplicationDetailResponse details = userService.getUserApplicationDetail(userId);
+        return ApiResponse.<SupplierApplicationDetailResponse>builder().
+                message("Update successfully").
+                result(details).
                 build();
     }
 }
