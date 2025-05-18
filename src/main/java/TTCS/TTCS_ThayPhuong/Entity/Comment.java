@@ -16,9 +16,9 @@ import java.util.List;
 public class Comment extends AbstractEntity<Long>{
 
     @ManyToOne()
-    @JoinColumn(name = "dish_id")
+    @JoinColumn(name = "supplier_has_ingredient_id")
     @JsonBackReference
-    private Dish dish;
+    private SupplierHasIngredient supplierHasIngredient;
     //thiếu nguyên liệu ở đây nữa
     @ManyToOne
     @JoinColumn(name="user_id")

@@ -23,13 +23,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping(value = "/getCommentsByDish/{dishId}")
-    public ApiResponse<PageResponse<List<CommentResponse>>> commentByDish (@PathVariable Long dishId,
+    @GetMapping(value = "/getCommentsByIngredientSupplier/{ingredientBySupplierId}")
+    public ApiResponse<PageResponse<List<CommentResponse>>> commentByIngredient (@PathVariable Long ingredientBuSupplierId,
                                                                            @RequestParam(defaultValue = "1", required = false) int page,
                                                                            @RequestParam(defaultValue = "10", required = false) int size) {
         return ApiResponse.<PageResponse<List<CommentResponse>>>builder()
                 .message("successfully")
-                .result(commentService.getCommentsByDish(dishId,page,size))
+                .result(commentService.getCommentsByIngredient(ingredientBuSupplierId,page,size))
                 .build();
     }
     @PostMapping(value = "/insertComment")

@@ -20,5 +20,5 @@ public class CommentRequest implements Serializable {
 
     @NotNull(message = "DishId cannot be null")
     @Min(value = 1,message = "Dish must be greater than 0")
-    private Long dishId;
+    private Long ingredientBuSupplierId;
 }

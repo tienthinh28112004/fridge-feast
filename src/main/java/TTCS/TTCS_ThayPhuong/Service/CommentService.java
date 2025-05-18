@@ -12,5 +12,5 @@ public interface CommentService {
     CommentResponse insertComment(CommentRequest request);
     void deleteComment(Long commentId);
     CommentUpdateResponse updateComment(Long commentId, CommentUpdateRequest request);
-    PageResponse<List<CommentResponse>> getCommentsByDish(Long dishId, int page, int size);
+    PageResponse<List<CommentResponse>> getCommentsByIngredient(Long dishId, int page, int size);
 }

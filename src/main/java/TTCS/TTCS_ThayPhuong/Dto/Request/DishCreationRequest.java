@@ -25,8 +25,6 @@ public class DishCreationRequest {
 
     private Float price;//20k
 
-    private String dishImage;
-
     private List<Long> listCategoryId;//1,2,3
 
     private List<Long> listIngredientId;//1,2,4

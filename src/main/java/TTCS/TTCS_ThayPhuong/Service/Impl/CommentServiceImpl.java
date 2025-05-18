@@ -5,16 +5,14 @@ import TTCS.TTCS_ThayPhuong.Dto.Request.CommentUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.CommentResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.CommentUpdateResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
-import TTCS.TTCS_ThayPhuong.Entity.Comment;
-import TTCS.TTCS_ThayPhuong.Entity.Dish;
-import TTCS.TTCS_ThayPhuong.Entity.User;
-import TTCS.TTCS_ThayPhuong.Entity.UserHasRole;
+import TTCS.TTCS_ThayPhuong.Entity.*;
 import TTCS.TTCS_ThayPhuong.Enums.Role;
 import TTCS.TTCS_ThayPhuong.Exception.BadRequestException;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Exception.TokenExpireException;
 import TTCS.TTCS_ThayPhuong.Repository.CommentRepository;
 import TTCS.TTCS_ThayPhuong.Repository.DishRepository;
+import TTCS.TTCS_ThayPhuong.Repository.SupplierHasIngredientRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
 import TTCS.TTCS_ThayPhuong.Service.CommentService;
 import TTCS.TTCS_ThayPhuong.Util.SecurityUtils;
@@ -34,6 +32,7 @@ import java.util.Objects;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final SupplierHasIngredientRepository supplierHasIngredientRepository;
     private final DishRepository dishRepository;
     @Override
     public CommentResponse insertComment(CommentRequest request) {
@@ -42,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new NotFoundException("User not found"));
 
-        Dish dish = dishRepository.findById(request.getDishId())
+        SupplierHasIngredient hasIngredient = supplierHasIngredientRepository.findById(request.getIngredientBuSupplierId())
                 .orElseThrow(()->new NotFoundException("Dish not found"));
 
         Comment parentComment = null;
@@ -55,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         }
         Comment newComment= Comment.builder()
                 .user(user)
-                .dish(dish)
+                .supplierHasIngredient(hasIngredient)
                 .parentComment(parentComment)
                 .content(request.getContent())
                 .build();
@@ -107,14 +106,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PageResponse<List<CommentResponse>> getCommentsByDish(Long dishId, int page, int size) {
+    public PageResponse<List<CommentResponse>> getCommentsByIngredient(Long hasIngredient, int page, int size) {
         Sort sort=Sort.by(Sort.Direction.DESC,"createdAt");
 
         Pageable pageable= PageRequest.of(page-1,size,sort);
-        Page<Comment> commentPage=commentRepository.findCommentByDishIdAndParentCommentIsNull(dishId,pageable);
+        Page<Comment> commentPage=commentRepository.findCommentByHasIngredientIdAndParentCommentIsNull(hasIngredient,pageable);
 
         List<CommentResponse> responseList=commentPage.stream().map(CommentResponse::convert).toList();
-        List<Comment> totalComment = commentRepository.findCommentByDishId( dishId );
+        List<Comment> totalComment = commentRepository.findCommentBySupplierHasIngredientId( hasIngredient );
         return PageResponse.<List<CommentResponse>>builder()
                         .currentPage(page)
                         .pageSize(size)

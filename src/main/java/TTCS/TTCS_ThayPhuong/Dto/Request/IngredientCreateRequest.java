@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class IngredientCreateRequest {
+public class                                            IngredientCreateRequest {
     @NotBlank
     private String name;
 

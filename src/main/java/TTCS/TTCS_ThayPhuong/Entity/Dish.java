@@ -39,8 +39,5 @@ public class Dish extends AbstractEntity<Long>{
     @OneToMany(mappedBy = "dish",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<DishHasIngredient> dishHasIngredients;//danh sách nguyên liệu món ăn
 
-    @OneToMany(mappedBy = "dish",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Comment> comments=new ArrayList<>();
 
 }
