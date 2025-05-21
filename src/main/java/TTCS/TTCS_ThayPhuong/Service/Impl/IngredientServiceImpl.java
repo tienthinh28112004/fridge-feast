@@ -8,6 +8,8 @@ import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Repository.IngredientRepository;
 import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +80,13 @@ public class IngredientServiceImpl implements IngredientService {
                 .orElseThrow(()->new NotFoundException("Ingredient not found"));
         ingredient.setActive(false);
         return IngredientResponse.convert(ingredient);
+    }
+
+    @Override
+    public List<IngredientResponse> ingredientByKeyword(String keyword) {
+        Pageable pageable= PageRequest.of(0,9);
+        List<Ingredient> ingredientList=ingredientRepository.findByIngredientKeyword(keyword,pageable);
+        return ingredientList.stream().map(IngredientResponse::convert).collect(Collectors.toList());
     }
 
     @Override

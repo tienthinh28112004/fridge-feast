@@ -8,6 +8,7 @@ import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientResponse;
 import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,16 @@ public class IngredientController {
         return ApiResponse.<List<IngredientResponse>>builder()
                 .message("List all ingredient successfully")
                 .result(ingredientService.getAllIngredient())
+                .build();
+    }
+    @GetMapping("/getIngredientByKeyword")
+    //@PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
+    public ApiResponse<List<IngredientResponse>> getAllIngredientByKeyword(
+            @RequestParam(required = false,defaultValue = "") String keyword
+    ){
+        return ApiResponse.<List<IngredientResponse>>builder()
+                .message("List all ingredient successfully")
+                .result(ingredientService.ingredientByKeyword(keyword))
                 .build();
     }
     @PatchMapping("/updateIngredient/{ingredientId}")

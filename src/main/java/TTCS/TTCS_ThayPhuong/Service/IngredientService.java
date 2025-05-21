@@ -17,6 +17,7 @@ public interface IngredientService {
     IngredientResponse updateIngredient(Long ingredientId, IngredientUpdateRequest request,MultipartFile ingredientPdf);
 
     IngredientResponse softDeleteIngredient(Long ingredientId);
+    List<IngredientResponse> ingredientByKeyword(String keyword);
 
     void hardDeleteIngredient(Long ingredientId);
 }
