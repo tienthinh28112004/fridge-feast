@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class DishResponse {
+    private Long id;
+
     private String name;
 
     private String description;
@@ -51,10 +53,12 @@ public class DishResponse {
         dish.getDishHasIngredients().stream()
                 .map(dishHasIngredient -> dishHasIngredient.getIngredient().getName()).forEach(dishIngredient::add);
         return DishResponse.builder()
+                .id(dish.getId())
                 .name(dish.getName())
                 .description(dish.getDescription())
                 .price(dish.getPrice())
                 .recipe(dish.getRecipe())
+                .dishImage(dish.getDishImage())
                 .timeCook(getTimeCook(dish.getTimeCook()))
                 .dishCategory(dishCategory)
                 .dishIngredient(dishIngredient)

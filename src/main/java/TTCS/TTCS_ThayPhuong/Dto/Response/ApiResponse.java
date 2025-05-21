@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)//dùng để đánh dấu chuyển về Json
 public class ApiResponse<T> {
+    @Builder.Default
     private int code=1000;
     private String message;
     private T result;

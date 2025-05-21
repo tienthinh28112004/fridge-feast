@@ -72,7 +72,7 @@ public class UserController {
     public ApiResponse<UserResponse> updateUser(
             @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .message("Update User successfully")
+                .message("Profile updated successfully")
                 .result(userService.update(request))
                 .build();
 
