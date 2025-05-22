@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class IngredientDetailResponse {
+    private Long id;
     private Long ingredientId;
     private Long supplierId;
     private String nameIngredient;
@@ -19,10 +20,11 @@ public class IngredientDetailResponse {
 
     public static IngredientDetailResponse convert(SupplierHasIngredient hasIngredient){
         return IngredientDetailResponse.builder()
+                .id(hasIngredient.getId())
                 .ingredientId(hasIngredient.getIngredient().getId())
                 .supplierId(hasIngredient.getSupplier().getId())
                 .nameIngredient(hasIngredient.getIngredient().getName())
-                .supplierName(hasIngredient.getSupplier().getFullName())
+                .supplierName(hasIngredient.getSupplier().getFullName() != null ?hasIngredient.getSupplier().getFullName():"admin")
                 .ingredientUrl(hasIngredient.getIngredient().getIngredientImage())
                 .priceIngredient(hasIngredient.getPrice())
                 .stock(hasIngredient.getStock())

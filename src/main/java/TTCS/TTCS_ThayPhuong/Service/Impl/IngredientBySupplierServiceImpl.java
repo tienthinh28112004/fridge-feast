@@ -37,9 +37,9 @@ public class IngredientBySupplierServiceImpl implements IngredientBySupplierServ
                 .orElseThrow(() -> new TokenExpireException("Bạn chưa đăng nhập"));
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        if(!Objects.equals(user.getStatusRegisterSupplier(), StatusRegisterSupplier.APPROVED)){
-            throw new AccessDeniedException("Tài khoản của bạn chưa được kích hoạt");
-        }
+//        if(!Objects.equals(user.getStatusRegisterSupplier(), StatusRegisterSupplier.APPROVED)){
+//            throw new AccessDeniedException("Tài khoản của bạn chưa được kích hoạt");
+//        }
         Ingredient ingredient = ingredientRepository.findById(request.getIngredientId())
                 .orElseThrow(()->new NotFoundException("Ingredient not found"));
         SupplierHasIngredient hasIngredient=SupplierHasIngredient.builder()

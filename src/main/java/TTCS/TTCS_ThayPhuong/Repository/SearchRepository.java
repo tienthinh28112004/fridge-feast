@@ -155,11 +155,11 @@ public class SearchRepository {
                             Predicate likeToName = criteriaBuilder.like(root.get("name"), "%" + x + "%");
                             Predicate likeToDescription = criteriaBuilder.like(root.get("description"), "%" + x + "%");
                             Predicate likeToRecipe = criteriaBuilder.like(root.get("recipe"), "%" + x + "%");
-
+                            log.info(x);
                             Predicate finalPre = criteriaBuilder.or(likeToName, likeToRecipe, likeToDescription);
                             predicate = criteriaBuilder.and(predicate, finalPre);
                         }
-                    }else if(matcher.group(3).equalsIgnoreCase("category")){
+                    }else if(matcher.group(1).equalsIgnoreCase("category")){
                         Predicate categoryPredicate = criteriaBuilder.like(hasCategoryJoin.get("name"),"%"+matcher.group(3)+"%");//lấy tên của dnah mục category để so sánh
                         predicate = criteriaBuilder.and(predicate,categoryPredicate);
                     }else{

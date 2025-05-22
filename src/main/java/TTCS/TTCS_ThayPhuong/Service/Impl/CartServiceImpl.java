@@ -101,4 +101,9 @@ public class CartServiceImpl implements CartService {
         user.getCart().setTotalMoney(0L);
         userRepository.save(user);
     }
+
+    @Override
+    public List<CartDetail> getDetailCart() {
+        return null;
+    }
 }
