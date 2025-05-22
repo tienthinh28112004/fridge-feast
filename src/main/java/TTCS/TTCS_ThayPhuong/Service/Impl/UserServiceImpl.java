@@ -101,12 +101,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<List<UserResponse>> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize, String... sorts) {
+    public PageResponse<List<UserResponse>> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize,String keyword, String sorts) {
         //sort
         List<Sort.Order> orders=new ArrayList<>();
-        for (String sort : sorts) {
+
+        log.info("page:{},size{},keyword:{}",pageNo,pageSize,keyword);
+        if(sorts!=null) {
+            log.info("vào đến đấy?");
             Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
-            Matcher matcher = pattern.matcher(sort);
+            Matcher matcher = pattern.matcher(sorts);
             if (matcher.find()) {
                 if (matcher.group(3).equalsIgnoreCase("asc")) {
                     orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
@@ -115,18 +118,22 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
+
         //Paging
-        Pageable pageable = PageRequest.of(pageNo-1,pageSize, Sort.by(orders));
-        Page<User> userPage = userRepository.findAll(pageable);
-
-        List<UserResponse> userResponseList=userPage.stream().map(UserResponse::convert).toList();
-
+        Pageable pageable=PageRequest.of(pageNo-1,pageSize,Sort.by(orders));
+        Page<User> userPage=null;
+        if(StringUtils.hasLength(keyword)&&keyword!=null){
+            userPage =userRepository.findAllByKeyword(pageable,keyword);
+        }else{
+            userPage = userRepository.findAll(pageable);
+        }
+        List<UserResponse> userList=userPage.stream().map(UserResponse::convert).toList();
         return PageResponse.<List<UserResponse>>builder()
                 .currentPage(pageNo)
                 .pageSize(pageSize)
                 .totalPages(userPage.getTotalPages())
-                .totalElements(userPage.getTotalElements())
-                .items(userResponseList)
+                .items(userList)
+                .totalElements((long) userList.size())
                 .build();
     }
 
@@ -155,6 +162,10 @@ public class UserServiceImpl implements UserService {
 
         if (StringUtils.hasText(request.getPhoneNumber()) && !request.getPhoneNumber().equals(user.getPhoneNumber())) {
             user.setPhoneNumber(request.getPhoneNumber());
+        }
+
+        if (StringUtils.hasText(request.getAvatar()) && !request.getAvatar().equals(user.getAvatarUrl())) {
+            user.setAvatarUrl(request.getAvatar());
         }
         userRepository.save(user);
         return UserResponse.convert(user);

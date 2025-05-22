@@ -23,4 +23,5 @@ public class UserUpdateRequest {
 
     private LocalDate dob;
 
+    private String avatar;
 }

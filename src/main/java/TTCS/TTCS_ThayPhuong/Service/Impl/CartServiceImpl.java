@@ -1,6 +1,7 @@
 package TTCS.TTCS_ThayPhuong.Service.Impl;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.CartAddItemRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Response.CartItemResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.CartTotalResponse;
 import TTCS.TTCS_ThayPhuong.Entity.CartDetail;
 import TTCS.TTCS_ThayPhuong.Entity.SupplierHasIngredient;
@@ -12,6 +13,7 @@ import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
 import TTCS.TTCS_ThayPhuong.Service.CartService;
 import TTCS.TTCS_ThayPhuong.Util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -103,7 +105,25 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartDetail> getDetailCart() {
-        return null;
+    public CartTotalResponse getDetailCart() {
+        String email = SecurityUtils.getCurrentLogin()
+                .orElseThrow(() -> new BadCredentialsException("unauthorized"));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        Long totalMoney = user.getCart().getTotalMoney();
+
+        long totalElements = user.getCart().getCartDetails().size();
+
+        List<CartItemResponse> carts = user.getCart().getCartDetails().stream()
+                .map(CartItemResponse::convert).toList();
+
+        return CartTotalResponse.builder()
+                .userId(user.getId())
+                .totalElements(totalElements)
+                .totalMoney(totalMoney)
+                .items(carts)
+                .build();
     }
 }

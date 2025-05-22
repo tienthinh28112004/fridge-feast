@@ -28,14 +28,17 @@ public class UserController {
     private final UserService userService;
 
     //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns")
-    public ApiResponse<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "1", required = false) int pageNo,
-                                                               @RequestParam(defaultValue = "10", required = false) int pageSize,
-                                                               @RequestParam(required = false) String... sorts) {
+    public ApiResponse<PageResponse<List<UserResponse>>> getAllUsersWithSortByMultipleColumns(
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sorts) {
         log.info("Request get all of users with sort by multiple columns");
         return ApiResponse.<PageResponse<List<UserResponse>>>builder()
-                .message("List users")
-                .result(userService.getAllUsersWithSortByMultipleColumns(pageNo, pageSize, sorts))
+                .message("list users")
+                .result(userService.getAllUsersWithSortByMultipleColumns(page, size,keyword, sorts))
                 .build();
     }
 

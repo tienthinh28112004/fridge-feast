@@ -10,6 +10,5 @@ public interface CartService {
     CartTotalResponse addOrUpdateItemCart(CartAddItemRequest request);
     void deleteItemCart(Long ingredientId);
     void clearAllItemCart();
-
-    List<CartDetail> getDetailCart();
+    CartTotalResponse getDetailCart();
 }

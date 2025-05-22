@@ -50,8 +50,8 @@ public class CartController {
 
     @GetMapping("/detailCart")
     @PreAuthorize("isAuthenticated()")
-    public ApiResponse<List<CartDetail>> getDetailCart() {
-        return ApiResponse.<List<CartDetail>>builder()
+    public ApiResponse<CartTotalResponse> getDetailCart() {
+        return ApiResponse.<CartTotalResponse>builder()
                 .message("Get detail cart successfully")
                 .result(cartService.getDetailCart())
                 .build();

@@ -17,7 +17,7 @@ public class CartTotalResponse implements Serializable {
     private Long userId;
     private Long totalElements;
     private Long totalMoney;
-    private List<IngredientBySupplierResponse> items;
+    private List<CartItemResponse> items;
 
     public static CartTotalResponse convert(Cart cart){
         return CartTotalResponse.builder()
@@ -26,7 +26,7 @@ public class CartTotalResponse implements Serializable {
                 .totalElements((long)cart.getCartDetails().size())
                 .totalMoney(cart.getTotalMoney())
                 .items(
-                        cart.getCartDetails().stream().map(IngredientBySupplierResponse::convertCart)
+                        cart.getCartDetails().stream().map(CartItemResponse::convert)
                                 .collect(Collectors.toList())
                 )
                 .build();

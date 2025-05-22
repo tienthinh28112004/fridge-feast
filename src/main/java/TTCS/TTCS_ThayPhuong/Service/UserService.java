@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface UserService {
     UserResponse createUser(UserCreateRequest request);
-    PageResponse<List<UserResponse>> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize, String... sorts);
+    PageResponse<List<UserResponse>> getAllUsersWithSortByMultipleColumns(int pageNo, int pageSize,String keyword, String sorts);
     UserResponse findById(Long id);
     UserResponse update(UserUpdateRequest request);
     void banUser(Long userId);
