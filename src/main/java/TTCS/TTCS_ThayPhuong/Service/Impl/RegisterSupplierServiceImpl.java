@@ -89,11 +89,11 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
             user.setFacebookLink(request.getFacebookLink());
             user.setCvUrl(cvUrl);
             user.setCertificate(certificateUrl);
-            user.setEmail(request.getEmail());
+//            user.setEmail(request.getEmail());
             user.setPhoneNumber(request.getPhone());
             user.setExpertise(request.getExpertise());
             user.setYearsOfExperience(request.getYearsOfExperience());
-            user.setFullName(request.getName());
+//            user.setFullName(request.getName());
             user.setStatusRegisterSupplier(StatusRegisterSupplier.PENDING);
 
             userRepository.save(user);

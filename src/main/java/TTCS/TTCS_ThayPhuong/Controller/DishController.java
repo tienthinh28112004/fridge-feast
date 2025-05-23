@@ -37,12 +37,12 @@ public class DishController {
     @PostMapping("/uploadDish")
     @PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
     public ApiResponse<DishResponse> uploadDish(
-            @RequestPart(required = false) MultipartFile dishImage,
+            @RequestPart(required = false) MultipartFile thumbnail,
             @RequestPart @Validated DishCreationRequest request
     ){
     return ApiResponse.<DishResponse>builder()
             .message("Upload dish")
-            .result(dishService.uploadDish(request,dishImage))
+            .result(dishService.uploadDish(request,thumbnail))
             .build();
     }
     @GetMapping("/getDishById/{dishId}")

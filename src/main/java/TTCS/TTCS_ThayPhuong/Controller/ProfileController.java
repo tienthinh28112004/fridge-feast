@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("api/v1/profile")
 @RequiredArgsConstructor
 public class ProfileController {
 

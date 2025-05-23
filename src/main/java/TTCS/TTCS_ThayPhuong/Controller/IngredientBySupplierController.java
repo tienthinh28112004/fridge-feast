@@ -50,6 +50,19 @@ public class IngredientBySupplierController {
                 .build();
     }
 
+    @GetMapping("/getAllIngredientByCurrentUser")
+    public ApiResponse<PageResponse<List<IngredientDetailResponse>>> getBookByAuthor(
+            @RequestParam(required = false,defaultValue = "1") int page,
+            @RequestParam(required = false,defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sorts
+    ) {
+        log.info("abcde {},{},{},{}",page,size,keyword,sorts);
+        return ApiResponse.<PageResponse<List<IngredientDetailResponse>>>builder()
+                .message("information book succesfully")
+                .result(ingredientBySupplierService.getIngredientBySupplier(page,size,keyword,sorts))
+                .build();
+    }
     @GetMapping("/getIngredientWithSortAndMultiFieldAndSearch")
     public ApiResponse<PageResponse<List<IngredientDetailResponse>>> getIngredientWithSortAndMultiFieldAndSearch(
             @RequestParam(required = false, defaultValue = "1") int page,

@@ -17,10 +17,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -78,4 +84,43 @@ public class IngredientBySupplierServiceImpl implements IngredientBySupplierServ
     public PageResponse<List<IngredientDetailResponse>> getIngredientWithSortAndMultiFieldAndSearch(int page, int size, String sortBy, String... search) {
         return searchRepository.getIngredientWithSortMultiFieldAndSearch(page, size,sortBy,search);
     }
-}
+
+    @Override
+    public PageResponse<List<IngredientDetailResponse>> getIngredientBySupplier(int page, int size, String keyword, String sorts) {
+            String email=SecurityUtils.getCurrentLogin()
+                    .orElseThrow(()->new BadCredentialsException("Bạn chưa đăng nhập"));
+            User user=userRepository.findByEmail(email)
+                    .orElseThrow(()->new NotFoundException("User not found"));
+            //sort
+            List<Sort.Order> orders=new ArrayList<>();
+
+            if(sorts!=null) {
+                Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+                Matcher matcher = pattern.matcher(sorts);
+                if (matcher.find()) {
+                    if (matcher.group(3).equalsIgnoreCase("asc")) {
+                        orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                    } else {
+                        orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                    }
+                }
+            }
+
+            //Paging
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(orders));
+            Page<SupplierHasIngredient> ingredientPage = null;
+            if (StringUtils.hasLength(keyword)&&keyword!=null) {
+                ingredientPage = supplierHasIngredientRepository.findAllByKeywordAndUserId(pageable, keyword,user.getId());
+            } else {
+                ingredientPage = supplierHasIngredientRepository.findAllByUserId(pageable,user.getId());
+            }
+            List<IngredientDetailResponse> ingredientList=ingredientPage.stream().map(IngredientDetailResponse::convert).toList();
+            return PageResponse.<List<IngredientDetailResponse>>builder()
+                    .currentPage(page)
+                    .pageSize(size)
+                    .totalPages(ingredientPage.getTotalPages())
+                    .items(ingredientList)
+                    .totalElements((long) ingredientList.size())
+                    .build();
+        }
+    }

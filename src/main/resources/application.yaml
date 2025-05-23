@@ -57,7 +57,7 @@ cloudinary:
 payment:
   vnPay:
     url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    returnUrl: http://localhost:8080/ApiWebManga/payment/vn-pay-callback
+    returnUrl: http://localhost:8081/payment/vn-pay-callback
     tmnCode: VZCBDZF0
     secretKey: Z1RRRC01ML3KT0NZNH4U2RNXQN8VFXP7
     version: 2.1.0
