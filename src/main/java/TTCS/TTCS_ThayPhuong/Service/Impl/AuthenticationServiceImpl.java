@@ -120,7 +120,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         Cookie cookie=new Cookie("refreshToken","");
-        cookie.setSecure(true);//chỉ https mới truyền được
+        cookie.setSecure(false);//chỉ https mới truyền được
         cookie.setPath("/");
         cookie.setHttpOnly(true);//đánh dấu httpOnly
         cookie.setMaxAge(0);

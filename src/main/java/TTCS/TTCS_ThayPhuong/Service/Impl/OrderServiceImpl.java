@@ -3,6 +3,7 @@ package TTCS.TTCS_ThayPhuong.Service.Impl;
 import TTCS.TTCS_ThayPhuong.Dto.Request.OrderDetailRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.OrderRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.OrderResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
 import TTCS.TTCS_ThayPhuong.Entity.Order;
 import TTCS.TTCS_ThayPhuong.Entity.OrderDetail;
 import TTCS.TTCS_ThayPhuong.Entity.SupplierHasIngredient;
@@ -101,10 +102,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> orderRecent(int page, int size) {
+    public PageResponse<List<OrderResponse>> orderRecent(int page, int size) {
         Sort sort=Sort.by(Sort.Direction.DESC,"createdAt");
         Pageable pageable= PageRequest.of(page-1,size,sort);
-        Page<Order> orderPage = orderRepository.findAll(pageable);
-        return orderPage.stream().map(OrderResponse::convert).collect(Collectors.toList());
+        Page<Order> orderList=orderRepository.findAll(pageable);
+        List<OrderResponse> responseList= orderList.stream().map(OrderResponse::convert).toList();
+        return PageResponse.<List<OrderResponse>>builder()
+                .currentPage(page)
+                .pageSize(size)
+                .totalPages(orderList.getTotalPages())
+                .totalElements(orderList.getTotalElements())
+                .items(responseList)
+                .build();
     }
 }

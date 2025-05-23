@@ -3,6 +3,7 @@ package TTCS.TTCS_ThayPhuong.Controller;
 import TTCS.TTCS_ThayPhuong.Dto.Request.OrderRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.OrderResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
 import TTCS.TTCS_ThayPhuong.Enums.OrderStatus;
 import TTCS.TTCS_ThayPhuong.Enums.PaymentExpression;
 import TTCS.TTCS_ThayPhuong.Service.OrderService;
@@ -50,11 +51,11 @@ public class OrderController {
     }
     @GetMapping("/getOrderRecent")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<List<OrderResponse>> getOrderRecent(
+    public ApiResponse<PageResponse<List<OrderResponse>>> getOrderRecent(
             @RequestParam(defaultValue = "1",required = false) int page,
             @RequestParam(defaultValue = "10",required = false) int size
     ) {
-        return ApiResponse.<List<OrderResponse>>builder()
+        return ApiResponse.<PageResponse<List<OrderResponse>>>builder()
                 .message("List order by createdAt by desc")
                 .result(orderService.orderRecent(page,size))
                 .build();

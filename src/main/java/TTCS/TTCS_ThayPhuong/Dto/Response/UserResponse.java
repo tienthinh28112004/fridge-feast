@@ -24,6 +24,7 @@ public class UserResponse {
     private String avatarUrl;
     private Double latitude;
     private Double longitude;
+    private LocalDate createdAt;
     private List<String> roles;
     //private List<IngredientBySupplierResponse> cartDetailList=new ArrayList<>();
 
@@ -34,8 +35,9 @@ public class UserResponse {
                 .userId(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
+                .createdAt(LocalDate.from(user.getCreatedAt()))
                 .isActive(user.isActive())
-                .phoneNumber(user.getPhoneNumber()!=null?user.getPhoneNumber():"")
+                .phoneNumber(user.getPhoneNumber()!=null?user.getPhoneNumber():"N/A")
                 .avatarUrl(user.getAvatarUrl())
                 .dob(user.getDob())
                 .latitude(user.getLatitude())

@@ -70,7 +70,7 @@ public class UserController {
                 .build();
     }
 
-    @PatchMapping("/update/{userId}")
+    @PatchMapping("/update")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ApiResponse<UserResponse> updateUser(
             @RequestBody @Valid UserUpdateRequest request) {
