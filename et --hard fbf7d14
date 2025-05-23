@@ -1,0 +1,20 @@
+[33m49f829f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33mfbf7d14[m HEAD@{1}: commit: update cart
+[33md93ca63[m HEAD@{2}: pull: Fast-forward
+[33ma92e407[m HEAD@{3}: checkout: moving from develop to develop
+[33ma92e407[m HEAD@{4}: reset: moving to HEAD
+[33ma92e407[m HEAD@{5}: commit: update search ingredient
+[33m6e6f8cb[m HEAD@{6}: commit: cập nhật comment
+[33mbe10a8e[m HEAD@{7}: commit: backendFinal
+[33m00f603e[m HEAD@{8}: commit (merge): +criteria
+[33mec9509f[m HEAD@{9}: commit: final+1
+[33me865a02[m HEAD@{10}: commit: fix lỗi
+[33mab757b9[m HEAD@{11}: commit: Cơ bản là gần xong backend
+[33m7023780[m HEAD@{12}: pull: Fast-forward
+[33m8ecbcc9[m HEAD@{13}: commit: vnpay+loginGoogle+redis
+[33m53f6f34[m HEAD@{14}: pull: Fast-forward
+[33m284ede8[m HEAD@{15}: checkout: moving from develop to develop
+[33m284ede8[m HEAD@{16}: commit: vnpay+loginGoogle+redis
+[33ma783fbb[m[33m ([m[1;32mmain[m[33m)[m HEAD@{17}: checkout: moving from main to develop
+[33ma783fbb[m[33m ([m[1;32mmain[m[33m)[m HEAD@{18}: Branch: renamed refs/heads/main to refs/heads/main
+[33ma783fbb[m[33m ([m[1;32mmain[m[33m)[m HEAD@{20}: commit (initial): ttcs

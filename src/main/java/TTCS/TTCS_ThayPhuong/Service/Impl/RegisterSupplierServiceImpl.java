@@ -106,6 +106,12 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
     public UserRegisterSupplierResponse acceptSupplier(Long supplierId) {
         User supplier=userRepository.findById(supplierId)
                 .orElseThrow(()->new NotFoundException("Supplier not found"));
+        boolean supply=false;
+        for(UserHasRole x: supplier.getUserHasRoles()){
+            if(x.getRole().getName().equalsIgnoreCase(String.valueOf(Role.SUPPLIER))){
+                supply=true;
+            }
+        }
         if(!Objects.equals(supplier.getStatusRegisterSupplier(),StatusRegisterSupplier.APPROVED)){
             supplier.setStatusRegisterSupplier(StatusRegisterSupplier.APPROVED);
 
@@ -128,7 +134,7 @@ public class RegisterSupplierServiceImpl implements RegisterSupplierService {
         User supplier = userRepository.findById(supplierId)
                 .orElseThrow(() -> new NotFoundException("Supplier not found"));
 
-        if (supplier.getStatusRegisterSupplier() == StatusRegisterSupplier.APPROVED) {
+        if (!Objects.equals(supplier.getStatusRegisterSupplier(),StatusRegisterSupplier.REJECTED)) {
             supplier.setStatusRegisterSupplier(StatusRegisterSupplier.REJECTED);
 
             UserHasRole roleToRemove = supplier.getUserHasRoles().stream()

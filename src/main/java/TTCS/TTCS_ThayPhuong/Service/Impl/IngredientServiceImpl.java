@@ -3,19 +3,27 @@ package TTCS.TTCS_ThayPhuong.Service.Impl;
 import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Entity.Ingredient;
+import TTCS.TTCS_ThayPhuong.Entity.User;
 import TTCS.TTCS_ThayPhuong.Exception.NotFoundException;
 import TTCS.TTCS_ThayPhuong.Repository.IngredientRepository;
 import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,7 +86,8 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientResponse softDeleteIngredient(Long ingredientId) {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
                 .orElseThrow(()->new NotFoundException("Ingredient not found"));
-        ingredient.setActive(false);
+        ingredient.setActive(!ingredient.isActive());
+        ingredientRepository.save(ingredient);
         return IngredientResponse.convert(ingredient);
     }
 
@@ -92,5 +101,39 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public void hardDeleteIngredient(Long ingredientId) {
         ingredientRepository.deleteById(ingredientId);
+    }
+
+    @Override
+    public PageResponse<List<IngredientResponse>> getAllIngredient(int pageNo, int pageSize, String keyword, String sorts) {
+        List<Sort.Order> orders=new ArrayList<>();
+
+        if(sorts!=null) {
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sorts);
+            if (matcher.find()) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                } else {
+                    orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                }
+            }
+        }
+
+        //Paging
+        Pageable pageable=PageRequest.of(pageNo-1,pageSize,Sort.by(orders));
+        Page<Ingredient> userPage=null;
+        if(StringUtils.hasLength(keyword)&&keyword!=null){
+            userPage =ingredientRepository.findAllByKeyword(pageable,keyword);
+        }else{
+            userPage = ingredientRepository.findAll(pageable);
+        }
+        List<IngredientResponse> userList=userPage.stream().map(IngredientResponse::convert).toList();
+        return PageResponse.<List<IngredientResponse>>builder()
+                .currentPage(pageNo)
+                .pageSize(pageSize)
+                .totalPages(userPage.getTotalPages())
+                .items(userList)
+                .totalElements((long) userList.size())
+                .build();
     }
 }

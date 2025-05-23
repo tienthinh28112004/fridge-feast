@@ -2,9 +2,7 @@ package TTCS.TTCS_ThayPhuong.Controller;
 
 import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientUpdateRequest;
-import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
-import TTCS.TTCS_ThayPhuong.Dto.Response.DishResponse;
-import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.*;
 import TTCS.TTCS_ThayPhuong.Service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +60,19 @@ public class IngredientController {
                 .result(ingredientService.ingredientByKeyword(keyword))
                 .build();
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getAllIngredientByKeyword")
+    public ApiResponse<PageResponse<List<IngredientResponse>>> getAllIngredient(
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sorts) {
+        return ApiResponse.<PageResponse<List<IngredientResponse>>>builder()
+                .message("list users")
+                .result(ingredientService.getAllIngredient(page, size,keyword, sorts))
+                .build();
+    }
+
     @PatchMapping("/updateIngredient/{ingredientId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> updateIngredient(
@@ -74,7 +85,7 @@ public class IngredientController {
                 .result(ingredientService.updateIngredient(ingredientId,request,ingredientPdf))
                 .build();
     }
-    @DeleteMapping("/deleteSoft/{ingredientId}")
+    @PatchMapping("/toggleStatus/{ingredientId}")
     //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<IngredientResponse> deleteSoftIngredient(
           @PathVariable("ingredientId") Long ingredientId
