@@ -5,7 +5,7 @@ spring:
   application:
     name: FridgeFeast
   datasource:
-    url: jdbc:mysql://localhost:3306/FridgeFeast
+    url: jdbc:mysql://localhost:3306/FridgeFeastFinal
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: admin
@@ -40,7 +40,7 @@ spring:
             redirect-uri: http://localhost:3000/oauth2/callback/google
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 app:
-  secret: "=I82mz/9NnVguNXdWC/Q39GwXJr1z6Ok8=8fm10jksU5CU2BgT6Pml4wuYLe72xt"
+  secret: =I82mz/9NnVguNXdWC/Q39GwXJr1z6Ok8=8fm10jksU5CU2BgT6Pml4wuYLe72xt
   jwt:
     token:
       expires-in: 3600000 # 60 minutes in milliseconds
@@ -57,7 +57,7 @@ cloudinary:
 payment:
   vnPay:
     url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    returnUrl: http://localhost:8080/ApiWebManga/payment/vn-pay-callback
+    returnUrl: http://localhost:8081/payment/vn-pay-callback
     tmnCode: VZCBDZF0
     secretKey: Z1RRRC01ML3KT0NZNH4U2RNXQN8VFXP7
     version: 2.1.0

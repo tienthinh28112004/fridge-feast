@@ -1,10 +1,14 @@
 package TTCS.TTCS_ThayPhuong.Entity;
 
+import TTCS.TTCS_ThayPhuong.Enums.OrderStatus;
+import TTCS.TTCS_ThayPhuong.Enums.StatusRegisterSupplier;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +30,9 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "password")
     private String password;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -33,7 +40,7 @@ public class User extends AbstractEntity<Long>{
     private boolean isActive;
 
     @Column(name = "date_of_birth")
-    private LocalDateTime dob;
+    private LocalDate dob;
 
     @Column(name = "avatar_url")
     private String avatarUrl;
@@ -44,7 +51,29 @@ public class User extends AbstractEntity<Long>{
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "refresh_token")
+    @Column(name = "expertise")
+    private String expertise;
+
+    @Column(name = "yearsOfExperience")
+    private Double yearsOfExperience;
+
+    @Column(name = "bio")
+    private String bio;
+
+    @Column(name = "certificate")
+    private String certificate;
+
+    @Column(name = "cvUrl")
+    private String cvUrl;
+
+    @Column(name = "facebookLink")
+    private String facebookLink;
+
+    @Column(name = "registrationStatus")
+    @Enumerated(EnumType.STRING)
+    private StatusRegisterSupplier statusRegisterSupplier;
+
+    @Column(name = "refresh_token", columnDefinition = "TEXT")
     private String refreshToken;
 
     @Column(name = "email_verified_at")
@@ -57,11 +86,11 @@ public class User extends AbstractEntity<Long>{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Cart cart;
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    @JsonManagedReference//để phòng hờ thôi vì chủ yếu mình đưa ra userReponse mà
-//    private List<Order> orders = new ArrayList<>();
-//
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference//để phòng hờ thôi vì chủ yếu mình đưa ra userReponse mà
+    private List<Order> orders = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<UserHasRole> userHasRoles;

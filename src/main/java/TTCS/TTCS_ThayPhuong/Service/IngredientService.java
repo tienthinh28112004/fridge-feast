@@ -1,0 +1,27 @@
+package TTCS.TTCS_ThayPhuong.Service;
+
+import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientCreateRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientUpdateRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Response.IngredientResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+public interface IngredientService {
+    IngredientResponse createIngredient(IngredientCreateRequest request, MultipartFile ingredientPdf);
+
+    IngredientResponse getById(Long ingredientId);
+
+    List<IngredientResponse> getAllIngredient();
+
+    IngredientResponse updateIngredient(Long ingredientId, IngredientUpdateRequest request,MultipartFile ingredientPdf);
+
+    IngredientResponse softDeleteIngredient(Long ingredientId);
+    List<IngredientResponse> ingredientByKeyword(String keyword);
+
+    void hardDeleteIngredient(Long ingredientId);
+
+    PageResponse<List<IngredientResponse>> getAllIngredient(int pageNo, int pageSize, String keyword, String sorts);
+}

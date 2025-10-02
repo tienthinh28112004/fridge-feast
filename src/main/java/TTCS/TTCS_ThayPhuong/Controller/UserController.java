@@ -1,10 +1,12 @@
 package TTCS.TTCS_ThayPhuong.Controller;
 
 
+import TTCS.TTCS_ThayPhuong.Dto.Request.ChangePasswordRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserCreateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Request.UserUpdateRequest;
 import TTCS.TTCS_ThayPhuong.Dto.Response.ApiResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.PageResponse;
+import TTCS.TTCS_ThayPhuong.Dto.Response.SupplierApplicationDetailResponse;
 import TTCS.TTCS_ThayPhuong.Dto.Response.UserResponse;
 import TTCS.TTCS_ThayPhuong.Service.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -23,53 +27,62 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
 
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns")
-    public ApiResponse<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "1", required = false) int pageNo,
-                                                               @RequestParam(defaultValue = "10", required = false) int pageSize,
-                                                               @RequestParam(required = false) String... sorts) {
+    public ApiResponse<PageResponse<List<UserResponse>>> getAllUsersWithSortByMultipleColumns(
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sorts) {
         log.info("Request get all of users with sort by multiple columns");
-        return ApiResponse.<PageResponse>builder()
+        return ApiResponse.<PageResponse<List<UserResponse>>>builder()
                 .message("list users")
-                .result(userService.getAllUsersWithSortByMultipleColumns(pageNo, pageSize, sorts))
+                .result(userService.getAllUsersWithSortByMultipleColumns(page, size,keyword, sorts))
                 .build();
     }
 
-    @PostMapping("/addUser")//để chờ register gọi đến
+    @PostMapping("/addUser")
     public ApiResponse<UserResponse> createUser(
             @RequestBody @Valid UserCreateRequest request){
-        log.info("add user");
         return ApiResponse.<UserResponse>builder()
-                .message("create sucessfully")
+                .message("Create user successfully")
                 .result(userService.createUser(request))
                 .build();
     }
 
-    //@PreAuthorize("#email == authentication.token.claims['subject'] or hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{userId}")
     public ApiResponse<UserResponse> getUser(
             @PathVariable("userId") final Long userId) {
         return ApiResponse.<UserResponse>builder()
-                .message("show user")
+                .message("Detail user")
                 .result(userService.findById(userId))
                 .build();
     }
+    @GetMapping("/getDistance/{userId}/{supplierId}")
+    public ApiResponse<Double> getDistance(
+            @PathVariable("userId") final Long userId,
+            @PathVariable("supplierId") final Long supplierId) {
+        return ApiResponse.<Double>builder()
+                .message("Detail user")
+                .result(userService.getDistance(userId,supplierId))
+                .build();
+    }
 
-    //@PreAuthorize("#email == authentication.token.claims['subject'] or hasAuthority('ADMIN')")
-    @PatchMapping("/update/{userId}")
+    @PatchMapping("/update")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ApiResponse<UserResponse> updateUser(
-            @PathVariable("userId") Long userId,
-            @RequestPart @Valid UserUpdateRequest request,
-            @RequestPart(name = "avatarPdf", required = false) MultipartFile avatarPdf) {
+            @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
-                .message("update User")
-                .result(userService.update(userId,request,avatarPdf))
+                .message("Profile updated successfully")
+                .result(userService.update(request))
                 .build();
 
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{userId}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<String> deleteUser(
             @PathVariable("userId") final Long userId){
         userService.delete(userId);
@@ -78,12 +91,51 @@ public class UserController {
                 build();
     }
 
-    //@PreAuthorize("isAuthenticated()")
-//    @GetMapping (value = "/myInfo")
-//    public ApiResponse<UserResponse> getMyInfo () {
-//        return ApiResponse.<UserResponse>builder()
-//                .result(userService.getMyInfo())
-//                .build();
-//    }
+    @PatchMapping("/changePassword")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<UserResponse> changePassword(
+            @RequestBody @Valid ChangePasswordRequest request){
+        return ApiResponse.<UserResponse>builder()
+                .message("Change password successfully")
+                .result(userService.changePassword(request))
+                .build();
+    }
+
+    @GetMapping (value = "/myInfo")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<UserResponse> getMyInfo () {
+        return ApiResponse.<UserResponse>builder()
+                .message("User detail")
+                .result(userService.getMyInfo())
+                .build();
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/banUser/{userId}")
+    public ApiResponse<String> banUser(
+            @PathVariable("userId") final Long userId){
+        userService.banUser(userId);
+        return ApiResponse.<String>builder().
+                result("User has been deleted").
+                build();
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/unBanUser/{userId}")
+    public ApiResponse<String> unBanUser(
+            @PathVariable("userId") final Long userId){
+        userService.unBanUser(userId);
+        return ApiResponse.<String>builder().
+                result("User has been deleted").
+                build();
+    }
+
+    @GetMapping("/{userId}/details")
+    public ApiResponse<SupplierApplicationDetailResponse> getUserApplicationDetail(@PathVariable Long userId) {
+        SupplierApplicationDetailResponse details = userService.getUserApplicationDetail(userId);
+        return ApiResponse.<SupplierApplicationDetailResponse>builder().
+                message("Update successfully").
+                result(details).
+                build();
+    }
 }
 

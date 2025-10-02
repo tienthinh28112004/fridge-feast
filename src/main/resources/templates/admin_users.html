@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Người dùng</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.png">
+    <link rel="stylesheet" href="/static/css/style_admin_list.css">
+    <link rel="stylesheet" href="/static/css/style_admin_menu.css">
+</head>
+<body>
+<!-- Menu -->
+<div class="menu">
+    <img src="/static/images/logo.png" alt="Logo">
+    <div class="line-break"></div>
+    <a href="#dashboard"><i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp; Trang chủ</a>
+    <a href="#users"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý người dùng</a>
+    <a href="#orders"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý đơn hàng</a>
+    <a href="#ingredients"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý nguyên liệu</a>
+    <a href="#dishes"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Quản lý món ăn</a>
+    <a href="#admin-settings"><i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp; Cài đặt</a>
+    <div class="footer"><p>&copy; 2025 FridgeFeast.</p></div>
+</div>
+<div class="content">
+<div class="title-box">
+    <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
+    <div class="sign-out">ĐĂNG XUẤT</div>
+
+    <div class="noti">
+        <i class="glyphicon glyphicon-envelope"></i>
+    </div>
+</div>
+<div class="search-box">
+    <div class="filter">
+        Lọc <i class="glyphicon glyphicon-menu-down"></i>
+    </div>
+    <input type="text" placeholder="Tìm kiếm người dùng"/>
+    <div class="add-new">Thêm mới</div>
+</div>
+<table class="table-info">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên</th>
+        <th>Giới tính</th>
+        <th>Ngày sinh</th>
+        <th>Email</th>
+        <th>Số điện thoại</th>
+        <th>Địa chỉ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>U001</td>
+        <td>Nguyen Van A</td>
+        <td>Male</td>
+        <td>1990-05-12</td>
+        <td>nguyenvana@example.com</td>
+        <td>0909123456</td>
+        <td>123 Le Loi, District 1, HCMC</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U002</td>
+        <td>Tran Thi B</td>
+        <td>Female</td>
+        <td>1985-09-22</td>
+        <td>tranthib@example.com</td>
+        <td>0912345678</td>
+        <td>45 Nguyen Trai, Hanoi</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U003</td>
+        <td>Le Van C</td>
+        <td>Male</td>
+        <td>2000-03-15</td>
+        <td>levanc@example.com</td>
+        <td>0988123456</td>
+        <td>78 Ly Thuong Kiet, Da Nang</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U004</td>
+        <td>Pham Thi D</td>
+        <td>Female</td>
+        <td>1992-11-30</td>
+        <td>phamthid@example.com</td>
+        <td>0909991122</td>
+        <td>56 Tran Hung Dao, Can Tho</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U005</td>
+        <td>Hoang Van E</td>
+        <td>Male</td>
+        <td>1988-08-18</td>
+        <td>hoangvane@example.com</td>
+        <td>0977332211</td>
+        <td>90 Nguyen Hue, Hue</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U006</td>
+        <td>Nguyen Thi F</td>
+        <td>Female</td>
+        <td>1995-07-10</td>
+        <td>nguyenthif@example.com</td>
+        <td>0966554433</td>
+        <td>321 Le Duan, HCMC</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U007</td>
+        <td>Tran Van G</td>
+        <td>Male</td>
+        <td>1987-02-14</td>
+        <td>tranvang@example.com</td>
+        <td>0911778899</td>
+        <td>12 Phan Dinh Phung, Da Lat</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U008</td>
+        <td>Vo Thi H</td>
+        <td>Female</td>
+        <td>1993-06-05</td>
+        <td>vothih@example.com</td>
+        <td>0901122334</td>
+        <td>67 Nguyen Van Troi, Bien Hoa</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U009</td>
+        <td>Le Van I</td>
+        <td>Male</td>
+        <td>1982-04-09</td>
+        <td>levani@example.com</td>
+        <td>0922456677</td>
+        <td>11 Hoang Dieu, Nha Trang</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U010</td>
+        <td>Dang Thi J</td>
+        <td>Female</td>
+        <td>1997-12-21</td>
+        <td>dangthij@example.com</td>
+        <td>0977994466</td>
+        <td>8 Hai Ba Trung, HCMC</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U011</td>
+        <td>Bui Van K</td>
+        <td>Male</td>
+        <td>1991-01-17</td>
+        <td>buivank@example.com</td>
+        <td>0933445566</td>
+        <td>34 Ly Thai To, Hue</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U012</td>
+        <td>Pham Thi L</td>
+        <td>Female</td>
+        <td>1986-03-03</td>
+        <td>phamthil@example.com</td>
+        <td>0944667788</td>
+        <td>25 Nguyen Tat Thanh, Da Nang</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U013</td>
+        <td>Nguyen Van M</td>
+        <td>Male</td>
+        <td>1989-09-29</td>
+        <td>nguyenvanm@example.com</td>
+        <td>0955778899</td>
+        <td>145 Cach Mang Thang 8, HCMC</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U014</td>
+        <td>Trinh Thi N</td>
+        <td>Female</td>
+        <td>1994-04-11</td>
+        <td>trinhthin@example.com</td>
+        <td>0966889900</td>
+        <td>23 Bach Dang, Hai Phong</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    <tr>
+        <td>U015</td>
+        <td>Do Van O</td>
+        <td>Male</td>
+        <td>1983-10-06</td>
+        <td>dovano@example.com</td>
+        <td>0904455667</td>
+        <td>89 Le Van Sy, HCMC</td>
+        <td><i class="glyphicon glyphicon-pencil"></i></td>
+        <td><i class="glyphicon glyphicon-trash"></i></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

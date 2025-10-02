@@ -363,7 +363,7 @@ footer {
 }
 
 .product-content {
-    display: flex;
+  display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -377,14 +377,19 @@ footer {
 }
 .product-content .content {
   width: 75%;
-  
 }
 .product-content .content h2 {
   font-family: "Playfair Display";
   color: #578721;
   font-size: 2vw;
   font-weight: 700;
+  flex: 1;
 }
 .product-content .content div {
-    float:right;
+  font-size: 1.5vw;
+}
+.product-content .content-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

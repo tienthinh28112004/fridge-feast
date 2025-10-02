@@ -2,7 +2,6 @@ package TTCS.TTCS_ThayPhuong.Configuration;
 
 import TTCS.TTCS_ThayPhuong.Dto.Response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -13,7 +12,7 @@ import java.io.IOException;
 
 public class JwtAccessDined implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         ErrorResponse errorResponse=ErrorResponse.builder()
                 .message("Bạn không có quyền truy cập")
                 .build();

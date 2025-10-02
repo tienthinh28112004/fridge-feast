@@ -8,7 +8,6 @@ import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -26,12 +25,9 @@ import java.util.Objects;
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${app.secret}")
     private String appSecret;
-
+    private NimbusJwtDecoder nimbusJwtDecoder=null;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-
-    private NimbusJwtDecoder nimbusJwtDecoder=null;
-
     @Override
     public Jwt decode(String token) throws JwtException {
 
@@ -41,14 +37,15 @@ public class CustomJwtDecoder implements JwtDecoder {
                     .withSecretKey(secretKeySpec) //truyền secretKeySpec vào
                     .macAlgorithm(MacAlgorithm.HS512) //thuật toán mã hóa
                     .build();
-        }
 
+        }
         try {
             String email = jwtService.extractEmail(token);
             User user = userRepository.findByEmail(email)
                     .orElseThrow(()->new NotFoundException("User not found"));
+            log.info("2");
             if(jwtService.verificationToken(token,user)){
-                nimbusJwtDecoder.decode(token);
+                return nimbusJwtDecoder.decode(token);
             }
         } catch (ParseException | JOSEException e) {
             log.error("token hết hạn");

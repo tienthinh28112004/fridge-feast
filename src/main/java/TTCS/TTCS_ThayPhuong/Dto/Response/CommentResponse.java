@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class CommentResponse {
     private Long id;
 
-    private Long dishId;
+    private Long supplierHasIngredientId;
 
     private String name;
 
@@ -54,7 +54,7 @@ public class CommentResponse {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .avatar(comment.getUser().getAvatarUrl())
-                .dishId(comment.getDish().getId())
+                .supplierHasIngredientId(comment.getSupplierHasIngredient().getId())
                 .content(comment.getContent())
                 .name(comment.getUser().getFullName())
                 .elapsed(getTimeElapsed(comment.getCreatedAt()))

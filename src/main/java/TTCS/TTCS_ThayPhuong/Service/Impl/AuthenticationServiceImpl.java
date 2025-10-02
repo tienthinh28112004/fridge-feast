@@ -14,13 +14,12 @@ import TTCS.TTCS_ThayPhuong.Repository.HttpClient.OutBoundIdentityClient;
 import TTCS.TTCS_ThayPhuong.Repository.HttpClient.OutBoundUserClient;
 import TTCS.TTCS_ThayPhuong.Repository.RolesRepository;
 import TTCS.TTCS_ThayPhuong.Repository.UserRepository;
-import TTCS.TTCS_ThayPhuong.Service.AuthenticationService;
-import TTCS.TTCS_ThayPhuong.Service.JwtService;
-import TTCS.TTCS_ThayPhuong.Service.RedisService;
+import TTCS.TTCS_ThayPhuong.Service.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -39,32 +38,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private final UserService userService;
     private final RolesRepository rolesRepository;
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
+    private final EmailVerificationTokenService emailVerificationTokenService;
     private final OutBoundIdentityClient outBoundIdentityClient;
     private final OutBoundUserClient outBoundUserClient;
 
     @Value("${app.jwt.token.expires-in}")
-    private final Long accessTokenExpireIn;
+    private Long accessTokenExpireIn;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private final String clientId;
+    private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private final String clientSecret;
+    private String clientSecret;
 
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
-    private final String redirectUri;
+    private String redirectUri;
 
-    private final String grantType ="authorization_code";
+    private final String grant_Type ="authorization_code";
 
 
     @Override
     public UserResponse register(UserCreateRequest request) {
-        return null;
+        return userService.createUser(request);
     }
 
     @Override
@@ -76,9 +77,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadRequestException("Tài khoản của bạn chưa ược kích hoạt,vui lòng xác nhận mã OTP được gửi về mail");
         }
 
-        if(!passwordEncoder.matches(user.getPassword(), request.getPassword())){
-            throw new BadCredentialsException("Thông tin đăng nhập không hợp lệ,mật khẩu không trùng với mật khẩu của hệ thống");
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Thông tin đăng nhập không hợp lệ, mật khẩu không đúng");
         }
+
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -118,7 +120,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         Cookie cookie=new Cookie("refreshToken","");
-        cookie.setSecure(true);//chỉ https mới truyền được
+        cookie.setSecure(false);//chỉ https mới truyền được
         cookie.setPath("/");
         cookie.setHttpOnly(true);//đánh dấu httpOnly
         cookie.setMaxAge(0);
@@ -147,8 +149,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public String verifyEmail(String token) {
-        return null;
+        User user= emailVerificationTokenService.getUserByToken(token);
+        user.setEmailVerifiedAt(LocalDateTime.now());
+        user.setActive(true);
+        userRepository.save(user);
+
+        emailVerificationTokenService.deleteByUserId(user.getId());//xóa token
+        log.info("E-mail verified with token: {}",token);
+        return "Xác thực thành công";
     }
 
 
@@ -175,11 +185,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public SignInResponse loginWithGoogle(String code, HttpServletResponse response) {
 
         ExchangeTokenResponse result = outBoundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
+                        .code(code)
                         .clientId(clientId)
                         .clientSecret(clientSecret)
-                        .code(code)
                         .redirectUri(redirectUri)
-                        .grantType(grantType)
+                        .grantType(grant_Type)
                 .build());
 
         GoogleUserResponse getUserInfo = outBoundUserClient.getUserInfo("json",result.getAccessToken());

@@ -3,10 +3,7 @@ package TTCS.TTCS_ThayPhuong.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,8 +16,9 @@ import java.util.List;
 public class Comment extends AbstractEntity<Long>{
 
     @ManyToOne()
-    @JoinColumn(name = "dish_id")
-    private Dish dish;
+    @JoinColumn(name = "supplier_has_ingredient_id")
+    @JsonBackReference
+    private SupplierHasIngredient supplierHasIngredient;
     //thiếu nguyên liệu ở đây nữa
     @ManyToOne
     @JoinColumn(name="user_id")

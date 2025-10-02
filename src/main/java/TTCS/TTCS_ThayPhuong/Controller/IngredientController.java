@@ -1,0 +1,109 @@
+package TTCS.TTCS_ThayPhuong.Controller;
+
+import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientCreateRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Request.IngredientUpdateRequest;
+import TTCS.TTCS_ThayPhuong.Dto.Response.*;
+import TTCS.TTCS_ThayPhuong.Service.IngredientService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/ingredient")
+@RequiredArgsConstructor
+@Slf4j
+@Validated
+public class IngredientController {
+    private final IngredientService ingredientService;
+    @PostMapping("/addIngredient")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<IngredientResponse> addIngredient(
+            @RequestPart IngredientCreateRequest request,
+            @RequestPart MultipartFile ingredientPdf
+    ){
+        return ApiResponse.<IngredientResponse>builder()
+                .message("Add ingredient successfully")
+                .result(ingredientService.createIngredient(request,ingredientPdf))
+                .build();
+    }
+    @GetMapping("/getIngredientById/{ingredientId}")
+    public ApiResponse<IngredientResponse> getIngredientById(
+            @PathVariable("ingredientId") Long ingredientId
+    ){
+        return ApiResponse.<IngredientResponse>builder()
+                .message("Ingredient by id successfully")
+                .result(ingredientService.getById(ingredientId))
+                .build();
+    }
+
+    @GetMapping("/getAllIngredient")
+    //@PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
+    public ApiResponse<List<IngredientResponse>> getAllIngredient(){
+        return ApiResponse.<List<IngredientResponse>>builder()
+                .message("List all ingredient successfully")
+                .result(ingredientService.getAllIngredient())
+                .build();
+    }
+    @GetMapping("/getIngredientByKeyword")
+    //@PreAuthorize("hasAuthority('SUPPLIER') or hasAuthority('ADMIN')")
+    public ApiResponse<List<IngredientResponse>> getAllIngredientByKeyword(
+            @RequestParam(required = false,defaultValue = "") String keyword
+    ){
+        return ApiResponse.<List<IngredientResponse>>builder()
+                .message("List all ingredient successfully")
+                .result(ingredientService.ingredientByKeyword(keyword))
+                .build();
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/getAllIngredientByKeyword")
+    public ApiResponse<PageResponse<List<IngredientResponse>>> getAllIngredient(
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sorts) {
+        return ApiResponse.<PageResponse<List<IngredientResponse>>>builder()
+                .message("list users")
+                .result(ingredientService.getAllIngredient(page, size,keyword, sorts))
+                .build();
+    }
+
+    @PatchMapping("/updateIngredient/{ingredientId}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<IngredientResponse> updateIngredient(
+            @PathVariable("ingredientId") Long ingredientId,
+            @RequestPart(required = false) MultipartFile ingredientPdf,
+            @RequestPart IngredientUpdateRequest request
+    ){
+        return ApiResponse.<IngredientResponse>builder()
+                .message("Update ingredient successfully")
+                .result(ingredientService.updateIngredient(ingredientId,request,ingredientPdf))
+                .build();
+    }
+    @PatchMapping("/toggleStatus/{ingredientId}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<IngredientResponse> deleteSoftIngredient(
+          @PathVariable("ingredientId") Long ingredientId
+    ){
+        return ApiResponse.<IngredientResponse>builder()
+                .message("Delete soft ingredient successfully")
+                .result(ingredientService.softDeleteIngredient(ingredientId))
+                .build();
+    }
+
+    @DeleteMapping("/deleteHard/{ingredientId}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<IngredientResponse> deleteHardIngredient(
+            @PathVariable("ingredientId") Long ingredientId
+    ){
+        ingredientService.hardDeleteIngredient(ingredientId);
+        return ApiResponse.<IngredientResponse>builder()
+                .message("Delete hard ingredient successfully")
+                .build();
+    }
+}
